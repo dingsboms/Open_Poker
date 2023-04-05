@@ -74,14 +74,14 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         check_flush();
         check_straight();
         check_of_a_kind();
-        if(is_straight_flush){best_hand = check_straight(); type_of_hand = "Straight Flush"; score = 32;}
-        else if(is_four_of_a_kind){best_hand = check_of_a_kind();setRestHighCards(); type_of_hand = "Four Of A Kind"; score = 28;}
-        else if(is_full_house){best_hand = check_of_a_kind(); type_of_hand = "Full House"; score = 24;}
-        else if(is_flush){best_hand = check_flush(); type_of_hand = "Flush"; score = 20;}
-        else if(is_straight){best_hand = check_straight(); type_of_hand = "Straight"; score = 16;}
-        else if(is_three_of_a_kind){best_hand = check_of_a_kind();setRestHighCards();type_of_hand = "Three Of A Kind";score = 12;}
-        else if(is_two_pairs){best_hand = check_of_a_kind();setRestHighCards();type_of_hand = "Two Pair"; score = 8;}
-        else if(is_pair){best_hand = check_of_a_kind(); setRestHighCards();type_of_hand = "A Pair"; score = 4;}
+        if(is_straight_flush){best_hand = check_straight(); type_of_hand = "Straight Flush"; score = 8;}
+        else if(is_four_of_a_kind){best_hand = check_of_a_kind();setRestHighCards(); type_of_hand = "Four Of A Kind"; score = 7;}
+        else if(is_full_house){best_hand = check_of_a_kind(); type_of_hand = "Full House"; score = 6;}
+        else if(is_flush){best_hand = check_flush(); type_of_hand = "Flush"; score = 5;}
+        else if(is_straight){best_hand = check_straight(); type_of_hand = "Straight"; score = 4;}
+        else if(is_three_of_a_kind){best_hand = check_of_a_kind();setRestHighCards();type_of_hand = "Three Of A Kind";score = 3;}
+        else if(is_two_pairs){best_hand = check_of_a_kind();setRestHighCards();type_of_hand = "Two Pair"; score = 2;}
+        else if(is_pair){best_hand = check_of_a_kind(); setRestHighCards();type_of_hand = "A Pair"; score = 1;}
         else{setRestHighCards(); type_of_hand = "High Card"; score = 0;}
 
         setTypeofHand(type_of_hand);
@@ -362,6 +362,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
     }
 
     @Override
+    // Four of a kind and down can be replaced with else-block
     public int compareTo(Poker_Hand other){
         int difference;
         difference = this.score - other.getScore();
@@ -408,9 +409,9 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         Player p1 = new Player("Bob");
         Player p2 = new Player("Hans");
         Player[] players = {p1, p2};
-        Table t = new Table(players);
+        Table t = new Table(players, 50);
 
-        for(int i = 0; i < 1; i++){
+        for(int i = 0; i < 100; i++){
             t.newRound(players);
             t.drawFlop();
             t.drawTurn();
