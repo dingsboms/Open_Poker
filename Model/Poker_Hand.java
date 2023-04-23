@@ -1,3 +1,4 @@
+package Model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -412,7 +413,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         Table t = new Table(players, 50);
 
         for(int i = 0; i < 100; i++){
-            t.newRound(players);
+            t.newRound();
             t.drawFlop();
             t.drawTurn();
             t.drawRiver();

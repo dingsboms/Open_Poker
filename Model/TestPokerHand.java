@@ -1,9 +1,10 @@
+package Model;
 public class TestPokerHand {
     public static void main(String[] args) {
         Player[] players = {new Player("Test-player1"), new Player("Test-player2")};
         Table table = new Table(players, 50);
 
-        table.newRound(players);
+        table.newRound();
         table.setBets();
         table.drawFlop();
         table.drawTurn();

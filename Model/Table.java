@@ -1,23 +1,33 @@
+package Model;
 import java.util.ArrayList;
 
 public class Table {
     Deck deck = new Deck();
     Player[] players;
+    CircularPlayerList player_order = new CircularPlayerList();
     ArrayList<Card> table_cards = new ArrayList<>();
     int start_chips;
     int pot = 0;
+    Player dealer;
+    Player active_player;
+    Player winner;
 
     public Table(Player[] players, int start_chips){
         this.players = players;
+        this.players[0].setDealer();
         this.start_chips = start_chips;
         for(Player player:players){
             player.setChips(start_chips);
+            player_order.addNode(player);
         }
     }
 
-    public void newRound(Player[] players){
+    public void newRound(){
+        winner = null;
+        player_order.moveDealerAndBlinds();
         deck.newDeck();
         deck.shuffle();
+        pot = 0;
 
         // Deal cards to players
         for(Player p: players){
@@ -25,13 +35,13 @@ public class Table {
         }
     }
 
+    // To-do
     public void setBets(){
-        int player_bet;
         int highest_bet = 0;
-        for(Player player:players){
-            System.out.println(player + ", your bet;");
-            player_bet = player.setBet();
-            if(player_bet > highest_bet){highest_bet = player_bet;}
+        for(Player player: players){
+            if(player.isTurn()){
+             
+            }
         }
     }
     public void drawFlop(){
@@ -77,6 +87,31 @@ public class Table {
     public Player[] getPlayers(){
         return players;
     }
+    public int getPot(){
+        return pot;
+    }
+    public Player getActivePlayer(){
+        for(Player player: players){
+            if(player.isTurn()){active_player = player;}
+        }
+        return active_player;
+    }
+    public Player getWinner(){
+        int num_of_active_players = 0;
+        for(Player p: players){
+            if(!p.hasFolded()){
+                num_of_active_players++;
+                winner = p;}
+        }
+        if(num_of_active_players == 1){return winner;}
+        return null;
+    }
+    @Override
+    public String toString(){
+        String players_string = "";
+        for(Player p: players){players_string += p + " ";}
+        return players_string + "Pot: " + pot;
+    }
 
     public static void main(String[] args) {
         Player[] players = new Player[2];
@@ -84,13 +119,13 @@ public class Table {
         players[1] = new Player("Peter");
         Table table = new Table(players, 50);
         
-        table.newRound(players);
+        table.newRound();
         table.viewHands();
         table.drawFlop();
         System.out.println(table.getTableCards());
         System.out.println(table.deck.getLength());
 
-        table.newRound(players);
+        table.newRound();
         table.viewHands();
         table.drawFlop();
         table.drawTurn();

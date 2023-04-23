@@ -1,3 +1,4 @@
+package Model;
 public class Card implements Comparable<Card>{
 // A card consists of a number and type; H, D, C, S
     int card_num;
