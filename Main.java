@@ -9,6 +9,6 @@ public class Main {
         View view = new View();
         Table table = new Table(players, 50);
 
-        Controller c =new Controller(view, table);
+        new Controller(view, table);
     }
 }

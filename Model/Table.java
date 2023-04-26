@@ -20,6 +20,8 @@ public class Table {
         }
         this.players[players.length-1].setDealer();
         player_order.moveDealerAndBlinds();
+        deck.shuffle();
+        dealHands();
     }
 
     public void newRound(){
@@ -28,13 +30,16 @@ public class Table {
         deck.shuffle();
         pot = 0;
 
-        // Deal cards to players
-        for(Player p: players){
-            p.drawHand(deck);
-        }
+        dealHands();
+
         player_order.moveDealerAndBlinds();
     }
 
+    public void dealHands(){
+        for(Player p: players){
+            p.drawHand(deck);
+        }
+    }
     public ArrayList<Card> drawFlop(){
         table_cards.add(deck.drawCard());
         table_cards.add(deck.drawCard());

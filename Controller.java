@@ -47,7 +47,7 @@ public class Controller {
         table_cards = table.drawAllTableCards();
         getActivePlayer();
         highest_bidder = active_player;
-        view.setStage("Pre-Flop");
+        for(Card c: table_cards){view.addTableCard(c.toString());}
         System.out.println("Round: " + round);
         setPlayersStatus();
     }
@@ -83,13 +83,12 @@ public class Controller {
         return active_player;
     }
 
-    // Refactor to flop.setVisible(true), etc..
     public void nextStage(){
         stage++;
         for(Player p : players){p.resetBet();}
-        if(stage == 1){view.setStage("Flop");}
-        else if(stage == 2){view.setStage("Turn");}
-        else if(stage == 3){view.setStage("River");}
+        if(stage == 1){view.showFlop();}
+        else if(stage == 2){view.showTurn();}
+        else if(stage == 3){view.showRiver();}
     }
 
     public void newRound(){
@@ -100,13 +99,11 @@ public class Controller {
         view.resetPot();
         table.newRound();
         table_cards = table.drawAllTableCards();
-        view.setStage("Pre-Flop");
 
         view.resetActivePlayerColor(active_player);
         // Bug-, newRound P3 player starts check
         highest_bidder = getActivePlayer();
         setPlayersStatus();
-        System.out.println("Highest Bidder: " + highest_bidder.getName());
         System.out.println("Round: " + round);
     }
 
@@ -121,13 +118,13 @@ public class Controller {
 
     public void setPlayersStatus(){
         for(Player p: players){
-            System.out.println("Player " + p.getName() + " status " + p.getStatus());
             if(p.getStatus() != "N"){view.setPlayerStatus(p);}
             else{view.resetPlayerStatus(p);}
         }
     }
     public Player getActivePlayer(){
         active_player = table.getActivePlayer();
+        System.out.println("Active Player: " + active_player.getName() + " Cards: " + active_player.getHand());
         view.setActivePlayer(active_player);
         if(active_player.getBet() == highest_bet){showButtons("bkf");}
         return active_player;

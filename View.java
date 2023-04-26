@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
@@ -25,6 +26,9 @@ public class View extends JFrame{
     JLabel[] player_chips = {chips_1, chips_2, chips_3, chips_4};
 
     JTextField user_input;
+
+    JPanel card_panel;
+    ArrayList<JLabel> table_cards = new ArrayList<>();
 
     Player active_player;
     Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -108,8 +112,8 @@ public class View extends JFrame{
         center = new JPanel();
         center.setLayout(new GridBagLayout());
         center.setBorder(blackline);
-        table = new JLabel("Table", JLabel.CENTER);
-        center.add(table, c);
+        card_panel = new JPanel();
+        center.add(card_panel, c);
         pot = new JLabel("Pot: 0", JLabel.CENTER);
         c.gridy = 1;
         center.add(pot, c);
@@ -132,6 +136,23 @@ public class View extends JFrame{
     }
     public void setStage(String stage){
         table.setText(stage);
+    }
+    public void addTableCard(String card){
+        JLabel card_label = new JLabel(card);
+        card_label.setVisible(false);
+        table_cards.add(card_label);
+        card_panel.add(card_label);
+    }
+    public void showFlop(){
+        table_cards.get(0).setVisible(true);
+        table_cards.get(1).setVisible(true);
+        table_cards.get(2).setVisible(true);
+    }
+    public void showTurn(){
+        table_cards.get(3).setVisible(true);
+    }
+    public void showRiver(){
+        table_cards.get(4).setVisible(true);
     }
     public void setPot(int new_pot){
         pot.setText("Pot: " + new_pot);
