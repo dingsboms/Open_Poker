@@ -20,7 +20,7 @@ public class View extends JFrame{
     String[] layouts = {BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
     JLabel player_1, player_2, player_3, player_4, pot, table;
     String[] player_label_string = {"Player 1", "Player 2", "Player 3", "Player 4"};
-    JLabel[] player_labels = {player_1, player_2, player_3, player_4};
+    JLabel[] player_label = {player_1, player_2, player_3, player_4};
     JLabel chips_1, chips_2, chips_3, chips_4;
     JLabel[] player_chips = {chips_1, chips_2, chips_3, chips_4};
 
@@ -29,9 +29,9 @@ public class View extends JFrame{
     Player active_player;
     Border blackline = BorderFactory.createLineBorder(Color.black);
 
-    JButton raise, bet, call, fold;
-    JButton[] buttons = {raise, bet, call, fold};
-    String[] button_labels = {"Raise", "Bet", "Call", "Fold"};
+    JButton raise, bet, call, check, fold;
+    JButton[] buttons = {raise, bet, call, check, fold};
+    String[] button_labels = {"Raise", "Bet", "Call", "Check", "Fold"};
 
     GridBagConstraints gbc;
     public View(){
@@ -50,7 +50,7 @@ public class View extends JFrame{
 
         gbc.gridy = 1;
         gbc.gridx = 0;
-        gbc.gridwidth = 4;
+        gbc.gridwidth = 5;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         command_field.add(user_input = new JTextField("0"), gbc);
 
@@ -98,7 +98,7 @@ public class View extends JFrame{
             current_panel = new JPanel();
             current_panel.setLayout(new GridBagLayout());
             current_panel.setBorder(blackline);
-            current_panel.add(player_labels[i] = new JLabel(player_label_string[i], JLabel.CENTER), c);
+            current_panel.add(player_label[i] = new JLabel(player_label_string[i], JLabel.CENTER), c);
             c.gridy = 1;
             current_panel.add(player_chips[i] = new JLabel("Chips: ", JLabel.CENTER), c);
             playing_field.add(current_panel, layouts[i]);
@@ -120,25 +120,46 @@ public class View extends JFrame{
         buttons[button].addActionListener(listener);
         
     }
-    public void setChipsPlayer(int player_num, int chips){
-        player_chips[player_num].setText("Chips: " + chips);
+    public void updatePlayerChips(){
+        int player_num = active_player.getUid();
+        //player_chips[player_num].setText("Chips: " + active_player.getChips());
+        player_chips[player_num].setText("Chips: " + active_player.getChips());
     }
     public void setStartChips(int start_chips){
         for(JLabel label: player_chips){
             label.setText("Chips: " + start_chips);
         }
     }
+    public void setStage(String stage){
+        table.setText(stage);
+    }
     public void setPot(int new_pot){
-        pot.setText("Chips: " + new_pot);
+        pot.setText("Pot: " + new_pot);
     }
     public void resetPot(){
-        pot.setText("Chips: " + 0);
+        pot.setText("Pot: " + 0);
     }
     public void setActivePlayer(Player active){
         active_player = active;
-        player_labels[active_player.getUid()].setForeground(Color.RED);
+        player_label[active_player.getUid()].setForeground(Color.RED);
     }   
+    public void resetActivePlayerColor(Player active){
+        player_label[active_player.getUid()].setForeground(Color.BLACK);
+    }
+    public void setPlayerStatus(Player player){
+        player_label[player.getUid()].setText(player.getName() + " " + player.getStatus());
+    }
+    public void resetPlayerStatus(Player player){
+        player_label[player.getUid()].setText(player.getName());
+    }
     public JTextField getTextField(){
         return user_input;
+    }
+    public void resetTextLabel(){
+        user_input.setText("0");
+    }
+    // 0 - Raise, 1 - Bet, 2 - Call, 3 - Fold
+    public JButton getButton(int num){
+        return buttons[num];
     }
 }

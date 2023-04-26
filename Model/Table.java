@@ -10,21 +10,20 @@ public class Table {
     int pot = 0;
     Player dealer;
     Player active_player;
-    Player winner;
 
     public Table(Player[] players, int start_chips){
         this.players = players;
-        this.players[0].setDealer();
         this.start_chips = start_chips;
         for(Player player:players){
             player.setChips(start_chips);
             player_order.addNode(player);
         }
+        this.players[players.length-1].setDealer();
+        player_order.moveDealerAndBlinds();
     }
 
     public void newRound(){
-        winner = null;
-        player_order.moveDealerAndBlinds();
+        table_cards.clear();
         deck.newDeck();
         deck.shuffle();
         pot = 0;
@@ -33,30 +32,31 @@ public class Table {
         for(Player p: players){
             p.drawHand(deck);
         }
+        player_order.moveDealerAndBlinds();
     }
 
-    // To-do
-    public void setBets(){
-        int highest_bet = 0;
-        for(Player player: players){
-            if(player.isTurn()){
-             
-            }
-        }
-    }
-    public void drawFlop(){
-        if(!table_cards.isEmpty()){table_cards.clear();}
+    public ArrayList<Card> drawFlop(){
         table_cards.add(deck.drawCard());
         table_cards.add(deck.drawCard());
         table_cards.add(deck.drawCard());
+        return table_cards;
     }
 
-    public void drawTurn(){
+    public ArrayList<Card> drawTurn(){
         table_cards.add(deck.drawCard());
+        return table_cards;
     }
 
-    public void drawRiver(){
+    public ArrayList<Card> drawRiver(){
         table_cards.add(deck.drawCard());
+        return table_cards;
+    }
+
+    public ArrayList<Card> drawAllTableCards(){
+        drawFlop();
+        drawTurn();
+        drawRiver();
+        return table_cards;
     }
 
     public void viewHands(){
@@ -71,6 +71,7 @@ public class Table {
         System.out.println("Table cards \n" + table_cards);
     }
 
+    // Artificially place table cards
     public void setTableCards(String card1, String card2, String card3, String card4, String card5){
         table_cards.clear();
         Card card;
@@ -87,6 +88,10 @@ public class Table {
     public Player[] getPlayers(){
         return players;
     }
+    public int addToPot(int bet){
+        pot += bet;
+        return pot;
+    }
     public int getPot(){
         return pot;
     }
@@ -96,15 +101,12 @@ public class Table {
         }
         return active_player;
     }
-    public Player getWinner(){
-        int num_of_active_players = 0;
-        for(Player p: players){
-            if(!p.hasFolded()){
-                num_of_active_players++;
-                winner = p;}
-        }
-        if(num_of_active_players == 1){return winner;}
-        return null;
+
+    public CircularPlayerList getPlayerOrder(){
+        return player_order;
+    }
+    public int getStartChips(){
+        return start_chips;
     }
     @Override
     public String toString(){
@@ -112,24 +114,4 @@ public class Table {
         for(Player p: players){players_string += p + " ";}
         return players_string + "Pot: " + pot;
     }
-
-    public static void main(String[] args) {
-        Player[] players = new Player[2];
-        players[0] = new Player("Tarun");
-        players[1] = new Player("Peter");
-        Table table = new Table(players, 50);
-        
-        table.newRound();
-        table.viewHands();
-        table.drawFlop();
-        System.out.println(table.getTableCards());
-        System.out.println(table.deck.getLength());
-
-        table.newRound();
-        table.viewHands();
-        table.drawFlop();
-        table.drawTurn();
-        System.out.println(table.getTableCards());
-        System.out.println(table.deck.getLength());
-    }   
 }

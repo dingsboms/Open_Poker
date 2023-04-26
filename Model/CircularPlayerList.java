@@ -67,30 +67,19 @@ public class CircularPlayerList{
         }
     }
 
-    public void nextTurn(){
+    public Player nextPersonsTurn(){
         Node currentNode = head;
+        // Finds the player whos turn it is currently
         while(!currentNode.player.isTurn()){
             currentNode = currentNode.nextNode;
         }
-        currentNode.player.resetIsTurn();
-        currentNode.nextNode.player.setIsTurn();
+        Player old_player_turn = currentNode.player;
+        while(currentNode.nextNode.player.hasFolded()){
+            currentNode = currentNode.nextNode;
+        }
+        old_player_turn.resetIsTurn();
+        Player player_new_turn = currentNode.nextNode.player;
+        player_new_turn.setIsTurn();
+        return player_new_turn;
     }
 }
-    
-
-
-
-// class LinkedListIterator implements Iterator<Player>{
-
-//     @Override
-//     public boolean hasNext() {
-//         return true;
-//     }
-//     @Override
-//     public Player next() {
-//         return nextNode.player;
-//     }
-//     public Iterator<Player> iterator(){
-//         return new LinkedListIterator();
-//     }
-// }

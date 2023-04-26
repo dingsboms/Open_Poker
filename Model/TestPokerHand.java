@@ -5,7 +5,6 @@ public class TestPokerHand {
         Table table = new Table(players, 50);
 
         table.newRound();
-        table.setBets();
         table.drawFlop();
         table.drawTurn();
         table.drawRiver();

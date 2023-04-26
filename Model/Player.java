@@ -53,22 +53,21 @@ public class Player {
     }
 
     public void setBet(int bet_inp){
-            chips -= bet;
-            bet = bet_inp;
+            chips -= bet_inp;
+            bet += bet_inp;
+    }
+    public int getBet(){
+        return bet;
     }
     public Boolean hasFolded(){
         return fold;
     }
     public void fold(){
-        is_turn = false;
         fold = true;
     }
     public void call(int bet_to_call){
         bet = bet_to_call;
         chips -= bet;
-    }
-    public int getBet(){
-        return bet;
     }
 
     public void resetBet(){
@@ -89,6 +88,7 @@ public class Player {
         status = "BB";
     }
     public void resetAll(){
+        is_turn = false;
         dealer = false;
         smallBlind = false;
         bigBlind = false;
@@ -101,7 +101,6 @@ public class Player {
         return bigBlind;
     }
     public Boolean isDealer(){
-        is_turn = true;
         return dealer;
     }
     public Boolean isTurn(){
@@ -116,6 +115,12 @@ public class Player {
     public int getUid(){
         return uid;
     }
+    public String getName(){
+        return name;
+    }
+    public String getStatus(){
+        return status;
+    }  
 
     @Override
     public String toString(){
