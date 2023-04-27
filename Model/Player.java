@@ -32,9 +32,8 @@ public class Player {
         hand.add(k);
         hand.add(l);
     }
-    public ArrayList<Card> getHand(){
-        return hand;
-    }
+    public ArrayList<Card> getHand(){return hand;}
+    
     public void drawHand(Deck deck){
         fold = false;
         bet = 0;
@@ -42,51 +41,48 @@ public class Player {
         hand.add(deck.drawCard());
         hand.add(deck.drawCard());
     }
-    public int getChips(){
-        return chips;
-    }
-    public void setChips(int amount){
-        chips = amount;
-    }
-    public void addChips(int pot){
-        chips += pot;
-    }
+
+    public int getChips(){return chips;}
+
+    public void setChips(int amount){chips = amount;}
+
+    public void addChips(int pot){chips += pot;}
 
     public void setBet(int bet_inp){
             chips -= bet_inp;
             bet = bet_inp;
     }
-    public int getBet(){
-        return bet;
-    }
-    public Boolean hasFolded(){
-        return fold;
-    }
-    public void fold(){
-        fold = true;
-    }
+
+    public int getBet(){return bet;}
+
+    public Boolean hasFolded(){return fold;}
+
+    public void fold(){fold = true;}
+
     public void call(int bet_to_call){
         bet = bet_to_call;
         chips -= bet;
     }
 
-    public void resetBet(){
-        bet = 0;
-    }
+    public void resetBet(){bet = 0;}
+
     public void setDealer(){
         is_turn = true;
         dealer = true;
         status = "D";
     }
+
     public void setSmallBlind(){
         smallBlind = true;
         if(status == "D"){status += " SB";}
         else{status = "SB";}
     }
+
     public void setBigBlind(){
         bigBlind = true;
         status = "BB";
     }
+
     public void resetAll(){
         is_turn = false;
         dealer = false;
@@ -94,33 +90,24 @@ public class Player {
         bigBlind = false;
         status = "N";
     }
-    public Boolean isSmallBlind(){
-        return smallBlind;
-    }
-    public Boolean isBigBlind(){
-        return bigBlind;
-    }
-    public Boolean isDealer(){
-        return dealer;
-    }
-    public Boolean isTurn(){
-        return is_turn;
-    }
-    public void setIsTurn(){
-        is_turn = true;
-    }
-    public void resetIsTurn(){
-        is_turn = false;
-    }
-    public int getUid(){
-        return uid;
-    }
-    public String getName(){
-        return name;
-    }
-    public String getStatus(){
-        return status;
-    }  
+
+    public Boolean isSmallBlind(){return smallBlind;}
+
+    public Boolean isBigBlind(){return bigBlind;}
+
+    public Boolean isDealer(){return dealer;}
+
+    public Boolean isTurn(){return is_turn;}
+
+    public void setIsTurn(){is_turn = true;}
+
+    public void resetIsTurn(){is_turn = false;}
+
+    public int getUid(){return uid;}
+
+    public String getName(){return name;}
+
+    public String getStatus(){return status;}  
 
     @Override
     public String toString(){

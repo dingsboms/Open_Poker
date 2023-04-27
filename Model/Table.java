@@ -41,6 +41,7 @@ public class Table {
             p.drawHand(deck);
         }
     }
+
     public void setBlinds(){
         for(Player p: players){
             if(p.isBigBlind()){p.setBet(big_blind); addToPot(big_blind);}
@@ -48,6 +49,7 @@ public class Table {
             else{p.setBet(0);}
         }
     }
+
     public ArrayList<Card> drawFlop(){
         table_cards.add(deck.drawCard());
         table_cards.add(deck.drawCard());
@@ -95,19 +97,17 @@ public class Table {
             table_cards.add(card);
         }
     }
-    public ArrayList<Card> getTableCards(){
-        return table_cards;
-    }
-    public Player[] getPlayers(){
-        return players;
-    }
+    public ArrayList<Card> getTableCards(){return table_cards;}
+
+    public Player[] getPlayers(){return players;}
+
     public int addToPot(int bet){
         pot += bet;
         return pot;
     }
-    public int getPot(){
-        return pot;
-    }
+
+    public int getPot(){return pot;}
+
     public Player getActivePlayer(){
         for(Player player: players){
             if(player.isTurn()){active_player = player;}
@@ -115,15 +115,12 @@ public class Table {
         return active_player;
     }
 
-    public CircularPlayerList getPlayerOrder(){
-        return player_order;
-    }
-    public int getStartChips(){
-        return start_chips;
-    }
-    public int getBigBlind(){
-        return big_blind;
-    }
+    public CircularPlayerList getPlayerOrder(){return player_order;}
+
+    public int getStartChips(){return start_chips;}
+
+    public int getBigBlind(){return big_blind;}
+    
     @Override
     public String toString(){
         String players_string = "";

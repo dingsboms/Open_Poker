@@ -4,12 +4,15 @@ public class CircularPlayerList{
     private Node head = null;
     private Node tail = null;
 
-    protected class Node{
+    public class Node{
         Player player;
         Node nextNode;
 
         public Node(Player player){
             this.player = player;
+        }
+        public Player getPlayer(){
+            return player;
         }
     }
 
@@ -67,19 +70,9 @@ public class CircularPlayerList{
         }
     }
 
-    public Node resetCurrentTurnNode(){
-        Node currentNode = head;
-        // Finds the player whos turn it is currently
-        while(!currentNode.player.isTurn()){
-            currentNode = currentNode.nextNode;
-        }
-        Player old_turn_player = currentNode.player;
-        old_turn_player.resetIsTurn();
-        return currentNode;
-    }
-
     public void nextPersonsTurn(){
-        Node currentNode = resetCurrentTurnNode();
+        Node currentNode = getCurrentPlayerInTurn();
+        resetCurrentTurnNode();
         while(currentNode.nextNode.player.hasFolded()){
             currentNode = currentNode.nextNode;
         }
@@ -100,5 +93,29 @@ public class CircularPlayerList{
             currentNode = currentNode.nextNode;
         }
         currentNode.player.setIsTurn();
+    }
+
+    public void resetCurrentTurnNode(){
+        Player old_turn_player = getCurrentPlayerInTurn().player;
+        old_turn_player.resetIsTurn();
+    }
+
+    public Node getCurrentPlayerInTurn(){
+        Node currentNode = head;
+        // Finds the player whos turn it is currently
+        while(!currentNode.player.isTurn()){
+            currentNode = currentNode.nextNode;
+        }
+        return currentNode;
+    }
+
+    public Node getNextPersonInTurn(){
+        Node currentNode = getCurrentPlayerInTurn();
+        // Finds the player whos turn it is currently
+        currentNode = currentNode.nextNode;
+        while(currentNode.player.hasFolded()){
+            currentNode = currentNode.nextNode;
+        }
+        return currentNode;
     }
 }

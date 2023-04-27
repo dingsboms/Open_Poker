@@ -127,61 +127,67 @@ public class View extends JFrame{
     public void updatePlayerChips(int player_uid, int new_chips){
         player_chips[player_uid].setText("Chips: " + new_chips);
     }
-    public void setStartChips(int start_chips){
-        for(JLabel label: player_chips){
-            label.setText("Chips: " + start_chips);
-        }
-    }
+
     public void setStage(String stage){
         table.setText(stage);
     }
+
     public void clearTableCards(){
         table_cards.clear();
     }
+
     public void addTableCard(String card){
         JLabel card_label = new JLabel(card);
         card_label.setVisible(false);
         table_cards.add(card_label);
         card_panel.add(card_label);
     }
+
     public void hideTableCards(){
         for(JLabel l: table_cards){l.setVisible(false);}
     }
+
     public void showFlop(){
         table_cards.get(0).setVisible(true);
         table_cards.get(1).setVisible(true);
         table_cards.get(2).setVisible(true);
     }
+
     public void showTurn(){
         table_cards.get(3).setVisible(true);
     }
+
     public void showRiver(){
         table_cards.get(4).setVisible(true);
     }
+
     public void setPot(int new_pot){
         pot.setText("Pot: " + new_pot);
     }
+
     public void setActivePlayer(Player active){
         active_player = active;
         player_label[active_player.getUid()].setForeground(Color.RED);
     }   
+
     public void resetActivePlayerColor(Player active){
         player_label[active_player.getUid()].setForeground(Color.BLACK);
     }
+
     public void setPlayerStatus(Player player){
         player_label[player.getUid()].setText(player.getName() + " " + player.getStatus());
     }
+
     public void resetPlayerStatus(Player player){
         player_label[player.getUid()].setText(player.getName());
     }
-    public JTextField getTextField(){
-        return user_input;
-    }
+
+    public JTextField getTextField(){return user_input;}
+
     public void resetTextLabel(){
         user_input.setText("0");
     }
+
     // 0 - Raise, 1 - Bet, 2 - Call, 3 - Fold
-    public JButton getButton(int num){
-        return buttons[num];
-    }
+    public JButton getButton(int num){return buttons[num];}
 }
