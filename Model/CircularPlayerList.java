@@ -43,43 +43,62 @@ public class CircularPlayerList{
 
     public void moveDealerAndBlinds(){
         Node currentNode = head;
-        while(!currentNode.player.isDealer()){
+        while(!currentNode.player.isSmallBlind()){
             currentNode = currentNode.nextNode;
         }
-        Player last_dealer = currentNode.player;
-        last_dealer.resetAll();
-        Node new_dealer_node = currentNode.nextNode;
-        Player new_dealer = new_dealer_node.player;
-        new_dealer.resetAll();
-        new_dealer.setDealer();
+        Player last_small_blind = currentNode.player;
+        last_small_blind.resetAll();
+        Node new_sb_node = currentNode.nextNode;
+        Player new_sb = new_sb_node.player;
+        new_sb.resetAll();
+        new_sb.setSmallBlind();
         // If theres only 2 players the dealer will also be small blind
-        if(new_dealer_node.nextNode.nextNode == new_dealer_node){
-            new_dealer.setSmallBlind();
-            new_dealer_node.nextNode.player.setBigBlind();
+        if(new_sb_node.nextNode.nextNode == new_sb_node){
+            new_sb.setDealer();
+            new_sb_node.nextNode.player.setBigBlind();
         }
         else{
-            Player newSmallBlind = new_dealer_node.nextNode.player;
-            newSmallBlind.resetAll();
-            newSmallBlind.setSmallBlind();
-            Player newBigBlind = new_dealer_node.nextNode.nextNode.player;
-            newBigBlind.resetAll();
-            newBigBlind.setBigBlind();
+            Player new_bb = new_sb_node.nextNode.player;
+            new_bb.resetAll();
+            new_bb.setBigBlind();
+            Player newDealer = new_sb_node.nextNode.nextNode.player;
+            newDealer.resetAll();
+            newDealer.setDealer();
         }
     }
 
-    public Player nextPersonsTurn(){
+    public Node resetCurrentTurnNode(){
         Node currentNode = head;
         // Finds the player whos turn it is currently
         while(!currentNode.player.isTurn()){
             currentNode = currentNode.nextNode;
         }
-        Player old_player_turn = currentNode.player;
+        Player old_turn_player = currentNode.player;
+        old_turn_player.resetIsTurn();
+        return currentNode;
+    }
+
+    public void nextPersonsTurn(){
+        Node currentNode = resetCurrentTurnNode();
         while(currentNode.nextNode.player.hasFolded()){
             currentNode = currentNode.nextNode;
         }
-        old_player_turn.resetIsTurn();
-        Player player_new_turn = currentNode.nextNode.player;
-        player_new_turn.setIsTurn();
-        return player_new_turn;
+        Player new_turn_player = currentNode.nextNode.player;
+        new_turn_player.setIsTurn();
+    }
+
+    public void nextPersonAfterDealersTurn(){
+        resetCurrentTurnNode();
+        Node currentNode = head;
+        // Finds dealer
+        while(!currentNode.player.isDealer()){
+            currentNode = currentNode.nextNode;
+        }
+        // Sets dealer to next person, if person has folded, goes to next
+        currentNode = currentNode.nextNode;
+        while(currentNode.player.hasFolded()){
+            currentNode = currentNode.nextNode;
+        }
+        currentNode.player.setIsTurn();
     }
 }

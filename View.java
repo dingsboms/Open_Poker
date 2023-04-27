@@ -124,10 +124,8 @@ public class View extends JFrame{
         buttons[button].addActionListener(listener);
         
     }
-    public void updatePlayerChips(){
-        int player_num = active_player.getUid();
-        //player_chips[player_num].setText("Chips: " + active_player.getChips());
-        player_chips[player_num].setText("Chips: " + active_player.getChips());
+    public void updatePlayerChips(int player_uid, int new_chips){
+        player_chips[player_uid].setText("Chips: " + new_chips);
     }
     public void setStartChips(int start_chips){
         for(JLabel label: player_chips){
@@ -137,11 +135,17 @@ public class View extends JFrame{
     public void setStage(String stage){
         table.setText(stage);
     }
+    public void clearTableCards(){
+        table_cards.clear();
+    }
     public void addTableCard(String card){
         JLabel card_label = new JLabel(card);
         card_label.setVisible(false);
         table_cards.add(card_label);
         card_panel.add(card_label);
+    }
+    public void hideTableCards(){
+        for(JLabel l: table_cards){l.setVisible(false);}
     }
     public void showFlop(){
         table_cards.get(0).setVisible(true);
@@ -156,9 +160,6 @@ public class View extends JFrame{
     }
     public void setPot(int new_pot){
         pot.setText("Pot: " + new_pot);
-    }
-    public void resetPot(){
-        pot.setText("Pot: " + 0);
     }
     public void setActivePlayer(Player active){
         active_player = active;

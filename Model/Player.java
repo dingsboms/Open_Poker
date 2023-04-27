@@ -54,7 +54,7 @@ public class Player {
 
     public void setBet(int bet_inp){
             chips -= bet_inp;
-            bet += bet_inp;
+            bet = bet_inp;
     }
     public int getBet(){
         return bet;

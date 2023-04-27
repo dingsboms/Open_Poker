@@ -8,6 +8,7 @@ public class Table {
     ArrayList<Card> table_cards = new ArrayList<>();
     int start_chips;
     int pot = 0;
+    int big_blind = 2;
     Player dealer;
     Player active_player;
 
@@ -18,10 +19,11 @@ public class Table {
             player.setChips(start_chips);
             player_order.addNode(player);
         }
-        this.players[players.length-1].setDealer();
+        this.players[1].setSmallBlind();
         player_order.moveDealerAndBlinds();
         deck.shuffle();
         dealHands();
+        setBlinds();
     }
 
     public void newRound(){
@@ -31,13 +33,19 @@ public class Table {
         pot = 0;
 
         dealHands();
-
-        player_order.moveDealerAndBlinds();
+        setBlinds();
     }
 
     public void dealHands(){
         for(Player p: players){
             p.drawHand(deck);
+        }
+    }
+    public void setBlinds(){
+        for(Player p: players){
+            if(p.isBigBlind()){p.setBet(big_blind); addToPot(big_blind);}
+            else if(p.isSmallBlind()){p.setBet(big_blind/2); addToPot(big_blind/2);}
+            else{p.setBet(0);}
         }
     }
     public ArrayList<Card> drawFlop(){
@@ -112,6 +120,9 @@ public class Table {
     }
     public int getStartChips(){
         return start_chips;
+    }
+    public int getBigBlind(){
+        return big_blind;
     }
     @Override
     public String toString(){

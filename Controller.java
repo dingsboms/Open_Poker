@@ -20,9 +20,11 @@ public class Controller {
     ArrayList<Card> table_cards;
     Player active_player;
     Player highest_bidder;
+    Player big_blind_player;
     int highest_bet;
     int stage;
     int num_of_active_players;
+    int big_blind;
 
     Controller(View view, Table table){
         this.view = view;
@@ -30,7 +32,8 @@ public class Controller {
         text_field = view.getTextField();
         addActionListeners();
         view.setStartChips(table.getStartChips());
-        highest_bet = 0;
+        big_blind = table.getBigBlind();
+        highest_bet = big_blind;
         stage = 0;
 
         button_map = new HashMap<>();
@@ -45,11 +48,15 @@ public class Controller {
         num_of_active_players = players.length;
         player_order = table.getPlayerOrder();
         table_cards = table.drawAllTableCards();
+        big_blind_player = getBigBlindPlayer();
+        highest_bidder = big_blind_player;
         getActivePlayer();
-        highest_bidder = active_player;
+
+        // Implement method to use in newRound()
         for(Card c: table_cards){view.addTableCard(c.toString());}
         System.out.println("Round: " + round);
         setPlayersStatus();
+        updateView();
     }
 
     // For example "rcf" would show Raise, Call, Fold. (k is for check)
@@ -75,16 +82,24 @@ public class Controller {
         b.setVisible(false);
     }
 
+    public void updateView(){
+        for(Player p: players){
+            view.updatePlayerChips(p.getUid(), p.getChips());
+        }
+        view.setPot(table.getPot());
+    }
+
     public Player getWinnerBeforeShow(){
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
-        view.updatePlayerChips();
+        updateView();
         newRound();
         return active_player;
     }
 
     public void nextStage(){
         stage++;
+        highest_bet = 0;
         for(Player p : players){p.resetBet();}
         if(stage == 1){view.showFlop();}
         else if(stage == 2){view.showTurn();}
@@ -92,28 +107,46 @@ public class Controller {
     }
 
     public void newRound(){
+        view.resetActivePlayerColor(active_player);
+
         round++;
         num_of_active_players = players.length;
         stage = 0;
-        highest_bet = 0;
-        view.resetPot();
-        table.newRound();
-        table_cards = table.drawAllTableCards();
+        highest_bet = big_blind;
 
-        view.resetActivePlayerColor(active_player);
-        // Bug-, newRound P3 player starts check
-        highest_bidder = getActivePlayer();
+        player_order.moveDealerAndBlinds();
         setPlayersStatus();
+        highest_bidder = getBigBlindPlayer();
+        table.newRound();
+        drawNewTableCards();
+
+        getActivePlayer();
         System.out.println("Round: " + round);
+
+        updateView();
     }
 
-    public Player nextPersonsTurn(){
+    public void nextPersonsTurn(){
         view.resetActivePlayerColor(active_player);
         player_order.nextPersonsTurn();
         getActivePlayer();
         if(num_of_active_players == 1){getWinnerBeforeShow();}
-        else if(active_player == highest_bidder){nextStage();}
-        return active_player;
+        else if(active_player == highest_bidder && stage != 0){nextStage();}
+    }
+    public void nextPersonAfterDealersTurn(){
+        view.resetActivePlayerColor(active_player);
+        player_order.nextPersonAfterDealersTurn();
+        getActivePlayer();
+        highest_bet = 0;
+        highest_bidder = active_player;
+        
+    }
+
+    public void drawNewTableCards(){
+        view.hideTableCards();
+        table_cards.clear();
+        table_cards = table.drawAllTableCards();
+        for(Card c: table_cards){view.addTableCard(c.toString());}
     }
 
     public void setPlayersStatus(){
@@ -127,9 +160,13 @@ public class Controller {
         System.out.println("Active Player: " + active_player.getName() + " Cards: " + active_player.getHand());
         view.setActivePlayer(active_player);
         if(active_player.getBet() == highest_bet){showButtons("bkf");}
+        else{showButtons("rcf");}
         return active_player;
     }
-
+    public Player getBigBlindPlayer(){
+        for(Player p: players){if (p.isBigBlind()){return p;}}
+        return null;
+    }
     public void addTablePot(int bet){
         int new_pot = table.addToPot(bet);
         view.setPot(new_pot);
@@ -137,7 +174,12 @@ public class Controller {
 
     public void setActivePlayerBet(int player_bet){
         active_player.setBet(player_bet);
-        view.updatePlayerChips();
+        updateView();
+    }
+    public void resetPlayerBets(){
+        for(Player p: players){
+            p.resetBet();
+        }
     }
     public void addActionListeners(){
         view.addActionListener(new Raise(), 0);
@@ -183,6 +225,7 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("Highest bet " +highest_bet + " active player bet " + active_player.getBet());
             setActivePlayerBet(highest_bet - active_player.getBet());
             addTablePot(active_player.getBet());
             nextPersonsTurn();
@@ -193,7 +236,12 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e){
-            nextPersonsTurn();
+            // Handles BB Pre-Flop to Flop Check
+            System.out.println("Check; ActivePlayer: " + active_player.getName());
+            if(active_player == highest_bidder && stage == 0){
+                nextStage();
+                nextPersonAfterDealersTurn();}
+            else{nextPersonsTurn();}
         }
     }
 
