@@ -66,7 +66,7 @@ public class Controller {
             showButton(button_map.get(c));
         }
     }
-    
+
     public void hideAllButtons(){
         for(int i = 0; i < 5; i++){
             hideButton(i);
@@ -98,7 +98,7 @@ public class Controller {
         newRound();
         return active_player;
     }
-
+    // Stage : 0 - Pre-Flop, 1 - Flop, 2 - Turn, 3 - River
     public void nextStage(){
         stage++;
         highest_bet = 0;
@@ -114,7 +114,7 @@ public class Controller {
 
         round++;
         num_of_active_players = players.length;
-        stage = 0;
+        stage = 0; // Pre-flop
         highest_bet = big_blind;
 
         player_order.moveDealerAndBlinds();
@@ -260,8 +260,10 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             active_player.fold();
             num_of_active_players --;
+            Player folded_player = active_player;
             nextPersonsTurn();
-            
+            // Moves highest_bidder to next person in turn in case the folded player was the highest bidder
+            if(highest_bidder == folded_player){highest_bidder = active_player;}
         }
     }
 }
