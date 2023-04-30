@@ -37,7 +37,10 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         available_cards.addAll(player_cards);
         // Substitute with .sort() method for arraylist
         available_cards = getSortedCards(available_cards);
+        setBestHand();
     }
+
+    public Player getPlayer(){return player;}
 
     // Delete
     public ArrayList<Card> getSortedCards(ArrayList<Card> unsorted_cards){
@@ -58,8 +61,6 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
     public ArrayList<Card> getAvailableCards(){
         return available_cards;}
 
-    public void setTypeofHand(String type){
-        type_of_hand = type;}
 
     public String getTypeofHand(){
         return type_of_hand;}
@@ -76,7 +77,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         check_straight();
         check_of_a_kind();
         if(is_straight_flush){best_hand = check_straight(); type_of_hand = "Straight Flush"; score = 8;}
-        else if(is_four_of_a_kind){best_hand = check_of_a_kind();setRestHighCards(); type_of_hand = "Four Of A Kind"; score = 7;}
+        else if(is_four_of_a_kind){ System.out.println("Whatdafaq");;best_hand = check_of_a_kind();setRestHighCards(); type_of_hand = "Four Of A Kind"; score = 7;}
         else if(is_full_house){best_hand = check_of_a_kind(); type_of_hand = "Full House"; score = 6;}
         else if(is_flush){best_hand = check_flush(); type_of_hand = "Flush"; score = 5;}
         else if(is_straight){best_hand = check_straight(); type_of_hand = "Straight"; score = 4;}
@@ -85,7 +86,6 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         else if(is_pair){best_hand = check_of_a_kind(); setRestHighCards();type_of_hand = "A Pair"; score = 1;}
         else{setRestHighCards(); type_of_hand = "High Card"; score = 0;}
 
-        setTypeofHand(type_of_hand);
     }
 
 
@@ -357,8 +357,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         return relevant_straight;
     }
     public void showBestHand(){
-        setBestHand();
-        System.out.println(this.player + " best hand is " + getTypeofHand());
+        System.out.println(this.player.getName() + "'s best hand is " + getTypeofHand());
         System.out.println(best_hand);
     }
 
@@ -406,6 +405,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
             }
         }return difference;
     }
+
     public static void main(String[] args) {
         Player p1 = new Player("Bob");
         Player p2 = new Player("Hans");
@@ -429,9 +429,12 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
             p1_hand.showBestHand();
             p2_hand.showBestHand();
     
+        
             if(p1_hand.compareTo(p2_hand) > 0) {System.out.println(p1 + " wins " + p1_hand.compareTo(p2_hand));}
             else if(p1_hand.compareTo(p2_hand) == 0){System.out.println("Draw");}
             else{System.out.println(p2 + " wins " + p1_hand.compareTo(p2_hand));}
+
+            System.out.println(p1_hand.compareTo(p1_hand));
     
         }
     }
