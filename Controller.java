@@ -42,6 +42,7 @@ public class Controller {
         button_map.put('c', 2);
         button_map.put('k', 3);
         button_map.put('f', 4);
+        button_map.put('n', 5);
 
         players = table.getPlayers();
         num_of_active_players = players.length;
@@ -67,11 +68,7 @@ public class Controller {
         }
     }
 
-    public void hideAllButtons(){
-        for(int i = 0; i < 5; i++){
-            hideButton(i);
-        }
-    }
+    public void hideAllButtons(){for(int i = 0; i < button_map.size(); i++){hideButton(i);}}
 
     // 0 - Raise, 1 - Bet, 2 - Call, 3 - Fold
     public void showButton(int button_num){
@@ -86,50 +83,41 @@ public class Controller {
 
     public void updateView(){
         for(Player p: players){
-            view.updatePlayerChips(p.getUid(), p.getChips());
-        }
+            view.updatePlayerChips(p.getUid(), p.getChips());}
         view.setPot(table.getPot());
     }
 
+    // Needs implementation of All-in cases
     public void showDown(){
         // Gets Poker Hands of unfolded players
-        ArrayList<Poker_Hand> poker_hands = new ArrayList<>();
-        for(Player p: players){
-            if(!p.hasFolded()){poker_hands.add(new Poker_Hand(p, table));}
-        }
-
-        ArrayList<Poker_Hand> best_hands = new ArrayList<>();
-        best_hands.addAll(poker_hands);
-        Poker_Hand best_hand = poker_hands.get(0);
-        for(Poker_Hand h1: poker_hands){
-            if(h1.compareTo(best_hand) > 0){
-                best_hands.remove(best_hand);
-                best_hand = h1; 
-            }
-            else if(h1 == best_hand){}
-            else if(h1.compareTo(best_hand) == 0 && h1 != best_hand){}
-            else{best_hands.remove(h1);}
-        }
-
-        if(best_hands.size() > 1 && best_hands.contains(best_hand)){
-            int num_of_winners = best_hands.size();
-            System.out.println("Pot is split between " + num_of_winners + " players;");
-            for(Poker_Hand ph: best_hands){
-                System.out.println(ph.getPlayer().getName() + " with " + ph.getBestHand());
-            }
-        }
+        ArrayList<Player> active_players = getActivePlayers();
+        ArrayList<Poker_Hand> poker_hands = makePokerHandsOfPlayers(active_players);
+        ArrayList<Poker_Hand> best_hands = getBestHands(poker_hands);
+       
+        if(best_hands.size() > 1){splitPot(best_hands);}
         else{
-            System.out.println(best_hand.getPlayer().getName() + " wins with " + best_hand.getTypeofHand());
-            System.out.println(best_hand.getBestHand());
-            best_hand.getPlayer().addChips(table.getPot());}
-        newRound();
-    }
+            Poker_Hand winner_hand = best_hands.get(0);
+            Player winner = winner_hand.getPlayer();
+            System.out.println(winner.getName() + " wins with " + winner_hand.getTypeofHand());
+            System.out.println(winner_hand.getBestHand());
+            winner.addChips(table.getPot());}
+        showButtons("n");
+        }
 
-    public Player getWinnerBeforeShow(){
+    public void getWinnerBeforeShow(){
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
-        newRound();
-        return active_player;
+        showButtons("n");
+    }
+
+    public void splitPot(ArrayList<Poker_Hand> best_hands){
+        int num_of_winners = best_hands.size();
+        int chips_per_person = table.getPot() / num_of_winners;
+        System.out.println("Pot is split between " + num_of_winners + " players;");
+        for(Poker_Hand ph: best_hands){
+            System.out.println(ph.getPlayer().getName() + " with " + ph.getBestHand());
+            ph.getPlayer().addChips(chips_per_person);
+        }
     }
     // Stage : 0 - Pre-Flop, 1 - Flop, 2 - Turn, 3 - River, 4 - Show Hands
     public void nextStage(){
@@ -194,6 +182,28 @@ public class Controller {
         }
     }
 
+    public ArrayList<Poker_Hand> makePokerHandsOfPlayers(ArrayList<Player> ph_players){
+        ArrayList<Poker_Hand> poker_hands = new ArrayList<>();
+        for(Player p:ph_players){poker_hands.add(new Poker_Hand(p, table));}
+        return poker_hands;
+    }
+
+    public ArrayList<Poker_Hand> getBestHands(ArrayList<Poker_Hand> hands_to_compare){
+        ArrayList<Poker_Hand> best_hands = new ArrayList<>();
+
+        Poker_Hand best_hand = hands_to_compare.get(0);
+        best_hands.add(best_hand);
+        for(Poker_Hand hand: hands_to_compare){
+            if(hand.compareTo(best_hand) > 0){
+                best_hands.clear();
+                best_hand = hand;
+                best_hands.add(best_hand);
+            }
+            else if(hand.compareTo(best_hand) == 0 && hand != best_hand){best_hands.add(hand);}
+        }
+        return best_hands;
+    }
+
     public Player getActivePlayer(){
         active_player = table.getActivePlayer();
         System.out.println("Active Player: " + active_player.getName() + " Cards: " + active_player.getHand());
@@ -201,6 +211,12 @@ public class Controller {
         if(active_player.getBet() == highest_bet){showButtons("bkf");}
         else{showButtons("rcf");}
         return active_player;
+    }
+
+    public ArrayList<Player> getActivePlayers(){
+        ArrayList<Player> active_players = new ArrayList<>();
+        for(Player p: players){if(!p.hasFolded()){active_players.add(p);}}
+        return active_players;
     }
 
     public Player getBigBlindPlayer(){
@@ -229,6 +245,7 @@ public class Controller {
         view.addActionListener(new Call(), 2);
         view.addActionListener(new Check(), 3);
         view.addActionListener(new Fold(), 4);
+        view.addActionListener(new New_Round(), 5);
     }
 
     class Raise implements ActionListener{
@@ -293,6 +310,13 @@ public class Controller {
             nextPersonsTurn();
             // Moves highest_bidder to next person in turn in case the folded player was the highest bidder
             if(highest_bidder == folded_player){highest_bidder = active_player;}
+        }
+    }
+    class New_Round implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e){
+            newRound();
         }
     }
 }

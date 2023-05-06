@@ -406,36 +406,4 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         }return difference;
     }
 
-    public static void main(String[] args) {
-        Player p1 = new Player("Bob");
-        Player p2 = new Player("Hans");
-        Player[] players = {p1, p2};
-        Table t = new Table(players, 50);
-
-        for(int i = 0; i < 100; i++){
-            t.newRound();
-            t.drawFlop();
-            t.drawTurn();
-            t.drawRiver();
-    
-            Poker_Hand p1_hand = new Poker_Hand(p1, t);
-            Poker_Hand p2_hand = new Poker_Hand(p2, t);
-
-            t.viewHands();
-            System.out.println("Table cards;");
-            System.out.println(t.getTableCards());
-
-            if(p1_hand.getBestHand().size() > 5){break;}
-            p1_hand.showBestHand();
-            p2_hand.showBestHand();
-    
-        
-            if(p1_hand.compareTo(p2_hand) > 0) {System.out.println(p1 + " wins " + p1_hand.compareTo(p2_hand));}
-            else if(p1_hand.compareTo(p2_hand) == 0){System.out.println("Draw");}
-            else{System.out.println(p2 + " wins " + p1_hand.compareTo(p2_hand));}
-
-            System.out.println(p1_hand.compareTo(p1_hand));
-    
-        }
-    }
 }

@@ -46,25 +46,4 @@ public class Deck{
         }
         return all_cards;
     }
-    public static void main(String[] args) {
-        Deck kortstokk = new Deck();
-        System.out.println(kortstokk);
-        System.out.println("Shuffling deck");
-        kortstokk.shuffle();
-        System.out.println("New Deck");
-        System.out.println(kortstokk);
-        System.out.println("Shuffling again");
-        kortstokk.shuffle();
-        System.out.println(kortstokk);
-        System.out.println("Top card:");
-        System.out.println(kortstokk.drawCard());
-        System.out.println("Rest of deck:");
-        System.out.println(kortstokk);
-        System.out.println(kortstokk.getLength());
-        kortstokk.newDeck();
-        System.out.println(kortstokk);
-        System.out.println(kortstokk.getLength());
-
-
-    }
 }

@@ -33,9 +33,9 @@ public class View extends JFrame{
     Player active_player;
     Border blackline = BorderFactory.createLineBorder(Color.black);
 
-    JButton raise, bet, call, check, fold;
-    JButton[] buttons = {raise, bet, call, check, fold};
-    String[] button_labels = {"Raise", "Bet", "Call", "Check", "Fold"};
+    JButton raise, bet, call, check, fold, new_round;
+    JButton[] buttons = {raise, bet, call, check, fold, new_round};
+    String[] button_labels = {"Raise", "Bet", "Call", "Check", "Fold", "New Round"};
 
     GridBagConstraints gbc;
     public View(){
@@ -54,7 +54,7 @@ public class View extends JFrame{
 
         gbc.gridy = 1;
         gbc.gridx = 0;
-        gbc.gridwidth = 5;
+        gbc.gridwidth = buttons.length;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         command_field.add(user_input = new JTextField("0"), gbc);
 
@@ -164,6 +164,10 @@ public class View extends JFrame{
     public void setPot(int new_pot){
         pot.setText("Pot: " + new_pot);
     }
+    // public void showHand(int player_num, String hand){
+    //     player_label[player_num].setForeground(Color.RED);
+    //     player_label[player_num].setText(hand);
+    // }
 
     public void setActivePlayer(Player active){
         active_player = active;
