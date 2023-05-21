@@ -7,9 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import Model.*;
+import View.Table_View;
 
 public class Controller {
-    View view;
+    Table_View view;
     Table table;
     JTextField text_field;
     HashMap<Character, Integer> button_map;
@@ -26,7 +27,7 @@ public class Controller {
     int num_of_active_players;
     int big_blind;
 
-    Controller(View view, Table table){
+    Controller(Table_View view, Table table){
         this.view = view;
         this.table = table;
         text_field = view.getTextField();
@@ -100,13 +101,15 @@ public class Controller {
             Player winner = winner_hand.getPlayer();
             System.out.println(winner.getName() + " wins with " + winner_hand.getTypeofHand());
             System.out.println(winner_hand.getBestHand());
-            winner.addChips(table.getPot());}
+            winner.addChips(table.getPot());
+            view.setAnnouncement(winner.getName() + " wins with " + winner_hand.getTypeofHand());}
         showButtons("n");
         }
 
     public void getWinnerBeforeShow(){
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
+        view.setAnnouncement("Winner is " + active_player.getName());
         showButtons("n");
     }
 
@@ -114,10 +117,13 @@ public class Controller {
         int num_of_winners = best_hands.size();
         int chips_per_person = table.getPot() / num_of_winners;
         System.out.println("Pot is split between " + num_of_winners + " players;");
+        String winners = "<html>";
         for(Poker_Hand ph: best_hands){
             System.out.println(ph.getPlayer().getName() + " with " + ph.getBestHand());
+            winners += ph.getPlayer().getName() + " with " + ph.getBestHand() + "<br>";
             ph.getPlayer().addChips(chips_per_person);
         }
+        view.setAnnouncement("Pot is split between " + num_of_winners + " players;" + winners + "</br></html>");
     }
     // Stage : 0 - Pre-Flop, 1 - Flop, 2 - Turn, 3 - River, 4 - Show Hands
     public void nextStage(){
@@ -131,7 +137,8 @@ public class Controller {
     }
 
     public void newRound(){
-        view.resetActivePlayerColor(active_player);
+        view.resetActivePlayerColor(active_player.getUid());
+        view.hideAnnouncement();
 
         round++;
         num_of_active_players = players.length;
@@ -151,7 +158,7 @@ public class Controller {
     }
     
     public void nextPersonsTurn(){
-        view.resetActivePlayerColor(active_player);
+        view.resetActivePlayerColor(active_player.getUid());
         if(player_order.getNextPersonInTurn().getPlayer() == highest_bidder){nextStage();}
         else{
             player_order.nextPersonsTurn();
@@ -161,7 +168,7 @@ public class Controller {
     }
 
     public void nextPersonAfterDealersTurn(){
-        view.resetActivePlayerColor(active_player);
+        view.resetActivePlayerColor(active_player.getUid());
         player_order.nextPersonAfterDealersTurn();
         getActivePlayer();
         highest_bet = 0;
@@ -207,7 +214,7 @@ public class Controller {
     public Player getActivePlayer(){
         active_player = table.getActivePlayer();
         System.out.println("Active Player: " + active_player.getName() + " Cards: " + active_player.getHand());
-        view.setActivePlayer(active_player);
+        view.setActivePlayer(active_player.getUid());
         if(active_player.getBet() == highest_bet){showButtons("bkf");}
         else{showButtons("rcf");}
         return active_player;

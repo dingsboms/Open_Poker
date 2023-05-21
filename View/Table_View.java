@@ -1,5 +1,7 @@
+package View;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
@@ -15,11 +17,11 @@ import javax.swing.border.Border;
 
 import Model.Player;
 
-public class View extends JFrame{
+public class Table_View extends JFrame{
     JPanel playing_field, command_field, top, right, bottom, left, center;
     JPanel[] panel = {top, right, bottom, left};
     String[] layouts = {BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
-    JLabel player_1, player_2, player_3, player_4, pot, table;
+    JLabel player_1, player_2, player_3, player_4, pot, table, announcement;
     String[] player_label_string = {"Player 1", "Player 2", "Player 3", "Player 4"};
     JLabel[] player_label = {player_1, player_2, player_3, player_4};
     JLabel chips_1, chips_2, chips_3, chips_4;
@@ -30,7 +32,6 @@ public class View extends JFrame{
     JPanel card_panel;
     ArrayList<JLabel> table_cards = new ArrayList<>();
 
-    Player active_player;
     Border blackline = BorderFactory.createLineBorder(Color.black);
 
     JButton raise, bet, call, check, fold, new_round;
@@ -38,7 +39,7 @@ public class View extends JFrame{
     String[] button_labels = {"Raise", "Bet", "Call", "Check", "Fold", "New Round"};
 
     GridBagConstraints gbc;
-    public View(){
+    public Table_View(){
         
         super("Open Poker");
         setLayout(new GridBagLayout());
@@ -78,9 +79,8 @@ public class View extends JFrame{
         setVisible(true);
     }
 
-    public JButton[] getButtons(){
-        return buttons;
-    }
+    public JButton[] getButtons(){return buttons;}
+
     public void makeButtons(){
         gbc.gridy = 0;
         gbc.weighty = 0.8;
@@ -92,6 +92,7 @@ public class View extends JFrame{
             command_field.add(buttons[i], gbc);
         }
     }
+    
     public void makeTable(){
         GridBagConstraints c;
         // Make Players
@@ -101,7 +102,6 @@ public class View extends JFrame{
 
             current_panel = new JPanel();
             current_panel.setLayout(new GridBagLayout());
-            current_panel.setBorder(blackline);
             current_panel.add(player_label[i] = new JLabel(player_label_string[i], JLabel.CENTER), c);
             c.gridy = 1;
             current_panel.add(player_chips[i] = new JLabel("Chips: ", JLabel.CENTER), c);
@@ -109,21 +109,33 @@ public class View extends JFrame{
             }
         // Make Table
         c = new GridBagConstraints();
-        center = new JPanel();
+        center = new CirclePanel();
         center.setLayout(new GridBagLayout());
-        center.setBorder(blackline);
         card_panel = new JPanel();
-        center.add(card_panel, c);
-        pot = new JLabel("Pot: 0", JLabel.CENTER);
         c.gridy = 1;
+        center.add(card_panel, c);
+        announcement = new JLabel("", JLabel.CENTER);
+        pot = new JLabel("Pot: 0", JLabel.CENTER);
+        c.gridy = 0;
+        c.gridx = 0;
+        center.add(announcement, c);
+        c.gridy = 2;
         center.add(pot, c);
         playing_field.add(center);
     }
+
+    public class CirclePanel extends JPanel{
+        @Override
+        protected void paintComponent(Graphics g) {
+            g.drawOval(0, 0, g.getClipBounds().width, g.getClipBounds().height);
+        }
+    }
+
     public void addActionListener(ActionListener listener, int button){
         // 0 - Raise, 1 - Bet, 2 - Call, 3 - Fold
         buttons[button].addActionListener(listener);
-        
     }
+    
     public void updatePlayerChips(int player_uid, int new_chips){
         player_chips[player_uid].setText("Chips: " + new_chips);
     }
@@ -147,6 +159,13 @@ public class View extends JFrame{
         for(JLabel l: table_cards){l.setVisible(false);}
     }
 
+    public void setAnnouncement(String sentence){
+        announcement.setText(sentence);
+        announcement.setVisible(true);
+    }
+
+    public void hideAnnouncement(){announcement.setVisible(false);}
+
     public void showFlop(){
         table_cards.get(0).setVisible(true);
         table_cards.get(1).setVisible(true);
@@ -164,18 +183,13 @@ public class View extends JFrame{
     public void setPot(int new_pot){
         pot.setText("Pot: " + new_pot);
     }
-    // public void showHand(int player_num, String hand){
-    //     player_label[player_num].setForeground(Color.RED);
-    //     player_label[player_num].setText(hand);
-    // }
 
-    public void setActivePlayer(Player active){
-        active_player = active;
-        player_label[active_player.getUid()].setForeground(Color.RED);
+    public void setActivePlayer(int player_uid){
+        player_label[player_uid].setForeground(Color.RED);
     }   
 
-    public void resetActivePlayerColor(Player active){
-        player_label[active_player.getUid()].setForeground(Color.BLACK);
+    public void resetActivePlayerColor(int player_uid){
+        player_label[player_uid].setForeground(Color.BLACK);
     }
 
     public void setPlayerStatus(Player player){

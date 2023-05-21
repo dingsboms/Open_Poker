@@ -17,12 +17,25 @@ public class DeckTest {
     }
 
     @Test
-    public void firstCardIsTwoOfHearts(){
-        Card c1 = d.drawCard();
-        int num = c1.getNum();
-        char type = c1.getType();
-        assertEquals(2, num);
-        assertEquals('H', type);
+    public void cardsCorrectUnshuffled(){
+        char[] types = {'H', 'D', 'C', 'S'};
+        for(int y = 0; y < 4; y++){
+            char expected_type = types[y];
+            for(int i = 2; i <= 14; i++){
+                Card c = d.drawCard();
+                int num = c.getNum();
+                char type = c.getType();
+                assertEquals(i, num);
+                assertEquals(expected_type, type);
+        }
+        }
     }
     
+    @Test
+    public void drawCardRemovesOneFromDeck(){
+        for(int i = 51; i > 0; i--){
+            d.drawCard();
+            assertEquals(i, d.getLength());
+        }
+    }
 }
