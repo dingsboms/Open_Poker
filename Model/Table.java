@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Table {
     Deck deck = new Deck();
-    Player[] players;
+    ArrayList<Player> players;
     CircularPlayerList player_order = new CircularPlayerList();
     ArrayList<Card> table_cards = new ArrayList<>();
     int start_chips;
@@ -12,14 +12,14 @@ public class Table {
     Player dealer;
     Player active_player;
 
-    public Table(Player[] players, int start_chips){
+    public Table(ArrayList<Player> players, int start_chips){
         this.players = players;
         this.start_chips = start_chips;
         for(Player player:players){
             player.setChips(start_chips);
             player_order.addNode(player);
         }
-        this.players[1].setSmallBlind();
+        this.players.get(1).setSmallBlind();
         player_order.moveDealerAndBlinds();
         deck.shuffle();
         dealHands();
@@ -99,7 +99,7 @@ public class Table {
     }
     public ArrayList<Card> getTableCards(){return table_cards;}
 
-    public Player[] getPlayers(){return players;}
+    public ArrayList<Player> getPlayers(){return players;}
 
     public int addToPot(int bet){
         pot += bet;

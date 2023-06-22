@@ -3,6 +3,7 @@ package View;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,8 +16,19 @@ public class Command_Palette extends JPanel{
     GridBagLayout gbl;
     GridBagConstraints gbc;
     JTextField user_input;
+    HashMap<Character, Integer> button_map;
+
 
     public Command_Palette(){
+        button_map = new HashMap<>();
+        // k is for check
+        button_map.put('r', 0);
+        button_map.put('b', 1);
+        button_map.put('c', 2);
+        button_map.put('k', 3);
+        button_map.put('f', 4);
+        button_map.put('n', 5);
+
         gbl = new GridBagLayout();
         gbc = new GridBagConstraints();
         setLayout(gbl);
@@ -46,5 +58,25 @@ public class Command_Palette extends JPanel{
     
     public void resetTextLabel(){
         user_input.setText("0");
+    }
+
+    // For example "rcf" would show Raise, Call, Fold. (k is for check)
+    public void showButtons(String button_chars){
+        hideAllButtons();
+        for(int i = 0; i < button_chars.length(); i++){
+            char c = button_chars.charAt(i);
+            showButton(button_map.get(c));
+        }
+    }
+
+    public void hideAllButtons(){for(int i = 0; i < button_map.size(); i++){hideButton(i);}}
+
+    // 0 - Raise, 1 - Bet, 2 - Call, 3 - Fold
+    public void showButton(int button_num){
+        buttons[button_num].setVisible(true);
+    }
+
+    public void hideButton(int button_num){
+        buttons[button_num].setVisible(false);
     }
 }

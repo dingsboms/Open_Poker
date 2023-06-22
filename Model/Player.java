@@ -2,6 +2,8 @@ package Model;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import View.Player_View;
+
 public class Player {
     String name;
     ArrayList<Card> hand = new ArrayList<>();
@@ -11,11 +13,12 @@ public class Player {
     boolean smallBlind = false;
     boolean dealer = false;
     Scanner user_input;
-    String status = "N";
+    String status = "";
     boolean fold = false;
     boolean is_turn = false;
     static int id = 0;
     int uid;
+    Player_View pv;
 
     public Player(String name){
         this.name = name;
@@ -88,7 +91,7 @@ public class Player {
         dealer = false;
         smallBlind = false;
         bigBlind = false;
-        status = "N";
+        status = "";
     }
 
     public Boolean isSmallBlind(){return smallBlind;}
