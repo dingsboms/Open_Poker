@@ -112,6 +112,9 @@ public class Player {
 
     public String getStatus(){return status;}  
 
+    public void setPlayerView(Player_View pv){this.pv = pv;}
+
+    public Player_View getPlayerView(){return pv;}
     @Override
     public String toString(){
         return "Player-name: " + name + " with hand " + hand.get(0) + hand.get(1) + " Chips: " + chips + " Status: " + status;

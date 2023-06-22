@@ -101,6 +101,7 @@ public class Controller {
             ph.getPlayer().addChips(chips_per_person);
         }
         view.setAnnouncement("Pot is split between " + num_of_winners + " players;" + winners + "</br></html>");
+
     }
 
     // Stage : 0 - Pre-Flop, 1 - Flop, 2 - Turn, 3 - River, 4 - Show Hands
@@ -228,7 +229,9 @@ public class Controller {
         player_views = new ArrayList<>();
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
-            player_views.add(new Player_View(p, player_view_size ,cords.getPlayerViewCord(i), view.getCommand_Palette()));
+            Player_View pv = new Player_View(p, player_view_size ,cords.getPlayerViewCord(i), view.getCommand_Palette());
+            p.setPlayerView(pv);
+            player_views.add(pv);
             }
         updatePlayerViews();
         updateView();
@@ -247,6 +250,7 @@ public class Controller {
             nextPersonsTurn();
             view.resetTextLabel();
             view.refresh();
+            cp = active_player.getPlayerView().getCommand_Palette();
         }
 
     }
@@ -260,14 +264,12 @@ public class Controller {
                 addTablePot(highest_bet + raise);
                 highest_bet += raise;
                 highest_bidder = active_player;
-                nextPersonsTurn();
-                view.resetTextLabel();
-                view.refresh();
+                super.actionPerformed(e);
                 }
             catch(NumberFormatException ex){System.out.println("Invalid input");}
         }
     }
-    class Bet implements ActionListener{
+    class Bet extends Poker_Button{
     
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -277,9 +279,7 @@ public class Controller {
                 addTablePot(bet);
                 highest_bet = bet;
                 highest_bidder = active_player;
-                nextPersonsTurn();
-                view.resetTextLabel();
-                view.refresh();
+                super.actionPerformed(e);
                 }
             catch(NumberFormatException ex){System.out.println("Invalid input");}
         }
@@ -310,16 +310,16 @@ public class Controller {
             active_player.fold();
             num_of_active_players --;
             Player folded_player = active_player;
-            nextPersonsTurn();
+            super.actionPerformed(e);
             // Moves highest_bidder to next person in turn in case the folded player was the highest bidder
             if(highest_bidder == folded_player){highest_bidder = active_player;}
-            view.refresh();
         }
     }
     class New_Round extends Poker_Button{
 
         @Override
         public void actionPerformed(ActionEvent e){
+            cp.setVisible(false);
             newRound();
         }
     }
