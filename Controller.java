@@ -53,12 +53,7 @@ public class Controller {
 
     public void updateView(){
         getActivePlayer();
-        if(player_view_in_use){
-            for(Player_View pv : player_views){
-                if(pv.getPlayer().isTurn()){
-                    cp = pv.getCommand_Palette();
-                    text_field = cp.getTextField();
-                    }}}
+        if(player_view_in_use){cp = active_player.getPlayerView().getCommand_Palette(); text_field = cp.getTextField();}
         updateCommandPallette();
         view.setPot(table.getPot());
         view.refresh();
@@ -84,10 +79,11 @@ public class Controller {
         }
 
     public void getWinnerBeforeShow(){
+        for(Player p: players){if(!p.hasFolded()){active_player = p; cp = active_player.getPlayerView().getCommand_Palette();}}
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
         view.setAnnouncement("Winner is " + active_player.getName());
-        cp.showButtons("n");
+        cp.setVisible(true); cp.showButtons("n");
     }
 
     public void splitPot(ArrayList<Poker_Hand> best_hands){
@@ -136,9 +132,9 @@ public class Controller {
     }
     
     public void nextPersonsTurn(){
-        if(player_order.getNextPersonInTurn().getPlayer() == highest_bidder){nextStage();}
-        else{player_order.nextPersonsTurn(); updateView();}
         if(num_of_active_players == 1){getWinnerBeforeShow();}
+        else if(player_order.getNextPersonInTurn().getPlayer() == highest_bidder){nextStage();}
+        else{player_order.nextPersonsTurn(); updateView();}
     }
 
     public void nextPersonAfterDealersTurn(){
@@ -210,8 +206,9 @@ public class Controller {
 
     public void updateCommandPallette(){
         cp.setVisible(true);
-        if(active_player.getBet() == highest_bet){cp.showButtons("bkf"); System.out.println("Player view " + active_player.getName() + " cm bkf");}
-        else{cp.showButtons("rcf");System.out.println("Player view " + active_player.getName()+ " cm rcf");}}
+        if(active_player.getBet() == highest_bet){cp.showButtons("bkf");}
+        else{cp.showButtons("rcf");}
+    }
 
     public void addActionListeners(){
         cp.addActionListener(new Raise(), 0);
@@ -234,7 +231,12 @@ public class Controller {
             player_views.add(pv);
             }
         updatePlayerViews();
-        updateView();
+        for(Player_View pv : player_views){
+                if(pv.getPlayer().isTurn()){
+                    cp = pv.getCommand_Palette();
+                    text_field = cp.getTextField();
+                    }}
+        updateCommandPallette();
     }
     
 
