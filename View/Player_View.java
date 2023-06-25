@@ -8,19 +8,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import Model.Player;
-
 public class Player_View extends JFrame{
     JPanel panel;
     JLabel hand;
     Command_Palette cm;
     int x, y;
-    Player player;
+    String player_name;
     Controller controller;
 
-    public Player_View(Player player, int size, Coordinate cord, Command_Palette command_field){
+    public Player_View(String player_name, int size, Coordinate cord, Command_Palette command_field){
         super("Player View");
-        this.player = player;
+        this.player_name = player_name;
         cm = new Command_Palette();
         copyCommandButtons(cm, command_field);
         x = (int) cord.getX();
@@ -43,11 +41,9 @@ public class Player_View extends JFrame{
         for(int i = 0; i < 6; i++){cp.addActionListener(cpy.getButton(i).getActionListeners()[0], i);}
     }
 
-    public void updateHand(){
-        hand.setText(player.getHand().toString());
-        if(player.isTurn()){cm.setVisible(true);}
+    public void updateHand(String s_hand){
+        hand.setText(s_hand);
     }
-    public Player getPlayer(){return player;}
 
     public Command_Palette getCommand_Palette(){return cm;}
 }

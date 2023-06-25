@@ -2,7 +2,6 @@ package Model;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import View.Player_View;
 
 public class Player {
     String name;
@@ -18,7 +17,6 @@ public class Player {
     boolean is_turn = false;
     static int id = 0;
     int uid;
-    Player_View pv;
 
     public Player(String name){
         this.name = name;
@@ -112,9 +110,6 @@ public class Player {
 
     public String getStatus(){return status;}  
 
-    public void setPlayerView(Player_View pv){this.pv = pv;}
-
-    public Player_View getPlayerView(){return pv;}
     @Override
     public String toString(){
         return "Player-name: " + name + " with hand " + hand.get(0) + hand.get(1) + " Chips: " + chips + " Status: " + status;

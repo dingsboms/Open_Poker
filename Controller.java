@@ -1,6 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JTextField;
 
@@ -13,17 +15,18 @@ import View.Table_View;
 public class Controller {
     Table_View view;
     Table table;
+    Command_Palette cp;
     JTextField text_field;
     int round = 1;
 
     CircularPlayerList player_order;
     ArrayList<Player> players;
     ArrayList<Card> table_cards;
+
     Player active_player, highest_bidder, big_blind_player;
     int highest_bet, stage, num_of_active_players, big_blind;
-    Command_Palette cp;
 
-    ArrayList<Player_View> player_views;
+    HashMap<Player, Player_View> player_views;
     int player_view_size = 150;
     Boolean player_view_in_use;
 
@@ -55,7 +58,7 @@ public class Controller {
 
     public void updateView(){
         getActivePlayer();
-        if(player_view_in_use){cp = active_player.getPlayerView().getCommand_Palette(); text_field = cp.getTextField();}
+        if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette(); text_field = cp.getTextField();}
         updateCommandPallette();
         view.setPot(table.getPot());
         view.refresh();
@@ -76,14 +79,14 @@ public class Controller {
             System.out.println(winner_hand.getBestHand());
             winner.addChips(table.getPot());
             view.setAnnouncement(winner.getName() + " wins with " + winner_hand.getTypeofHand());
-            cp = winner.getPlayerView().getCommand_Palette();
+            cp = player_views.get(winner).getCommand_Palette();
             }
         cp.setVisible(true);
         cp.showButtons("n");
         }
 
     public void getWinnerBeforeShow(){
-        for(Player p: players){if(!p.hasFolded()){active_player = p; cp = active_player.getPlayerView().getCommand_Palette();}}
+        for(Player p: players){if(!p.hasFolded()){active_player = p; cp = player_views.get(active_player).getCommand_Palette();}}
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
         view.setAnnouncement("Winner is " + active_player.getName());
@@ -227,16 +230,17 @@ public class Controller {
         Coordinates cords = new Coordinates(view, player_view_size);
         view.getCommand_Palette().setVisible(false);
         player_view_in_use = true;
-        player_views = new ArrayList<>();
+        player_views = new HashMap<>();
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
-            Player_View pv = new Player_View(p, player_view_size ,cords.getPlayerViewCord(i), view.getCommand_Palette());
-            p.setPlayerView(pv);
-            player_views.add(pv);
+            Player_View pv = new Player_View(p.getName(), player_view_size ,cords.getPlayerViewCord(i), view.getCommand_Palette());
+            player_views.put(p, pv);
             }
         updatePlayerViews();
-        for(Player_View pv : player_views){
-                if(pv.getPlayer().isTurn()){
+        for(Map.Entry<Player, Player_View> set : player_views.entrySet()){
+                Player_View pv = set.getValue();
+                Player pl = set.getKey();
+                if(pl.isTurn()){
                     cp = pv.getCommand_Palette();
                     text_field = cp.getTextField();
                     }}
@@ -245,7 +249,7 @@ public class Controller {
     
 
     public void updatePlayerViews(){
-        for(Player_View pv : player_views){pv.updateHand();}
+        for(Map.Entry<Player, Player_View> set : player_views.entrySet()){set.getValue().updateHand(set.getKey().getHand().toString());}
     }
 
     class Poker_Button implements ActionListener{
@@ -256,7 +260,7 @@ public class Controller {
             nextPersonsTurn();
             view.resetTextLabel();
             view.refresh();
-            if(player_view_in_use){cp = active_player.getPlayerView().getCommand_Palette();}
+            if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette();}
         }
 
     }
