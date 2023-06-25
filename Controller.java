@@ -25,7 +25,7 @@ public class Controller {
 
     ArrayList<Player_View> player_views;
     int player_view_size = 150;
-    Boolean player_view_in_use = false;
+    Boolean player_view_in_use;
 
 
     Controller(Table_View view, Table table){
@@ -47,6 +47,8 @@ public class Controller {
         big_blind_player = getBigBlindPlayer();
         highest_bidder = getDealer();
         System.out.println("Round: " + round);
+
+        player_view_in_use = false;
         
         updateView();
     }
@@ -73,8 +75,10 @@ public class Controller {
             System.out.println(winner.getName() + " wins with " + winner_hand.getTypeofHand());
             System.out.println(winner_hand.getBestHand());
             winner.addChips(table.getPot());
-            view.setAnnouncement(winner.getName() + " wins with " + winner_hand.getTypeofHand());}
-        
+            view.setAnnouncement(winner.getName() + " wins with " + winner_hand.getTypeofHand());
+            cp = winner.getPlayerView().getCommand_Palette();
+            }
+        cp.setVisible(true);
         cp.showButtons("n");
         }
 
@@ -248,11 +252,11 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            cp.setVisible(false);
+            if(player_view_in_use){cp.setVisible(false);}
             nextPersonsTurn();
             view.resetTextLabel();
             view.refresh();
-            cp = active_player.getPlayerView().getCommand_Palette();
+            if(player_view_in_use){cp = active_player.getPlayerView().getCommand_Palette();}
         }
 
     }

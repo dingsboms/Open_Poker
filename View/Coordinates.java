@@ -7,6 +7,7 @@ public class Coordinates{
     ArrayList<Coordinate> all_cords, active_cords, location;
     int x_l, x_r, x_c, y_t, y_b, y_c;
 
+    // For Player_View
     public Coordinates(Table_View view, int player_view_size){
         location = new ArrayList<>();
         x_l = view.getX() - player_view_size;
@@ -21,12 +22,17 @@ public class Coordinates{
         location.add(left = new Coordinate(x_l, y_c));
     }
 
-    public Coordinates(int width, int num_of_players){
-        x_l = 20;
+    public Coordinate getPlayerViewCord(int i){
+        return location.get(i);
+    }
+
+    // For Playing_Field
+    public Coordinates(int width, int height, int num_of_players){
+        x_l = 40;
         y_t = 40;
-        y_b = 350;
-        y_c = 200;
-        x_r = width - 25;
+        y_b = height - 40;
+        y_c = height/2 - 8;
+        x_r = width - 40;
         x_c = (width)/2;
 
         all_cords = new ArrayList<>();
@@ -49,11 +55,7 @@ public class Coordinates{
         if(num_of_players == 7){active_cords.add(top); active_cords.add(tr); active_cords.add(right); active_cords.add(br); active_cords.add(bot); active_cords.add(bl); active_cords.add(left);}
         if(num_of_players == 8){active_cords = all_cords;}
     }
-
-    public Coordinate getPlayerViewCord(int i){
-        return location.get(i);
-    }
-
+    // For Playing_Field
     public Coordinate getPlayingFieldCord(int i){
         return active_cords.get(i);
     }

@@ -22,7 +22,6 @@ public class Playing_Field extends JPanel{
         this.players = players;
         setSize(playing_field_size, playing_field_size);
         num_of_players = players.size();
-        cords = new Coordinates(this.getWidth(), players.size());
 
         pot = "0";
         card_panel = "";
@@ -32,7 +31,7 @@ public class Playing_Field extends JPanel{
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        int cbl = 60;
+        int cbl = 80;
         int width = g2d.getClipBounds().width;
         int height = g2d.getClipBounds().height;
         FontMetrics metrics = g2d.getFontMetrics();
@@ -46,16 +45,22 @@ public class Playing_Field extends JPanel{
         st_le = metrics.stringWidth(announcement);
         g2d.drawString(announcement, (width-st_le)/2, height/2 + 40);
 
-
+        // Draws players
+        cords = new Coordinates(width, height, players.size());
+        Coordinate c;
+        Player p;
         for(int i = 0; i < num_of_players; i++){
-            Player p = players.get(i);
+            p = players.get(i);
             st_le = metrics.stringWidth(p.getName());
-            Coordinate c = cords.getPlayingFieldCord(i);
+            c = cords.getPlayingFieldCord(i);
 
             if(p.isTurn()){g2d.setColor(Color.RED);}
-            g2d.drawString(p.getName() + " " + p.getStatus(), c.getX(), c.getY());
+            g2d.drawString(p.getName(), c.getX() - st_le/2, c.getY());
             g2d.setColor(Color.BLACK);
-            g2d.drawString("" + p.getChips(), c.getX(), c.getY() + 15);
+            st_le = metrics.stringWidth(p.getStatus());
+            g2d.drawString(p.getStatus(), c.getX() - st_le/2, c.getY()-15);
+            st_le = metrics.stringWidth(Integer.toString(p.getChips()));
+            g2d.drawString("" + p.getChips(), c.getX() - st_le/2, c.getY() + 15);
         }
     }
 
