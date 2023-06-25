@@ -79,14 +79,15 @@ public class Controller {
             System.out.println(winner_hand.getBestHand());
             winner.addChips(table.getPot());
             view.setAnnouncement(winner.getName() + " wins with " + winner_hand.getTypeofHand());
-            cp = player_views.get(winner).getCommand_Palette();
+            if(player_view_in_use)cp = player_views.get(winner).getCommand_Palette();
             }
         cp.setVisible(true);
         cp.showButtons("n");
         }
 
     public void getWinnerBeforeShow(){
-        for(Player p: players){if(!p.hasFolded()){active_player = p; cp = player_views.get(active_player).getCommand_Palette();}}
+        for(Player p: players){if(!p.hasFolded()){active_player = p; 
+            if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette();}}};
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
         view.setAnnouncement("Winner is " + active_player.getName());
