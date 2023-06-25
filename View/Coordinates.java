@@ -3,6 +3,8 @@ package View;
 import java.util.ArrayList;
 
 public class Coordinates{
+    Coordinate top, bot, left, right, tl, tr, bl, br;
+    int x_l, x_r, x_c, y_t, y_b, y_c;
     ArrayList<Coordinate> all_cords, active_cords, all_location, location;
 
     public class Coordinate {
@@ -19,8 +21,6 @@ public class Coordinates{
 
     // For Player_View
     public Coordinates(Table_View view, int player_view_size, int num_of_players){
-        Coordinate top, bot, left, right, tl, tr, bl, br; 
-        int x_l, x_r, x_c, y_t, y_b, y_c;
 
         location = new ArrayList<>();
         all_location = new ArrayList<>();
@@ -57,8 +57,6 @@ public class Coordinates{
 
     // For Playing_Field
     public Coordinates(int width, int height, int num_of_players){
-        Coordinate top, bot, left, right, tl, tr, bl, br; 
-        int x_l, x_r, x_c, y_t, y_b, y_c;
 
         x_l = 40;
         y_t = 40;
