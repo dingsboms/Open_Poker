@@ -47,20 +47,21 @@ public class Playing_Field extends JPanel{
 
         // Draws players
         cords = new Coordinates(width, height, players.size());
-        Coordinate c;
         Player p;
+        int x, y;
         for(int i = 0; i < num_of_players; i++){
             p = players.get(i);
             st_le = metrics.stringWidth(p.getName());
-            c = cords.getPlayingFieldCord(i);
+            x = (int) cords.getPlayingFieldCordX(i);
+            y = (int) cords.getPlayingFieldCordY(i);
 
             if(p.isTurn()){g2d.setColor(Color.RED);}
-            g2d.drawString(p.getName(), c.getX() - st_le/2, c.getY());
+            g2d.drawString(p.getName(), x- st_le/2, y);
             g2d.setColor(Color.BLACK);
             st_le = metrics.stringWidth(p.getStatus());
-            g2d.drawString(p.getStatus(), c.getX() - st_le/2, c.getY()-15);
+            g2d.drawString(p.getStatus(), x- st_le/2, y-15);
             st_le = metrics.stringWidth(Integer.toString(p.getChips()));
-            g2d.drawString("" + p.getChips(), c.getX() - st_le/2, c.getY() + 15);
+            g2d.drawString("" + p.getChips(), x- st_le/2, y + 15);
         }
     }
 

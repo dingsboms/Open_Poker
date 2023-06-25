@@ -228,13 +228,13 @@ public class Controller {
     }
 
     public void usePlayerViews(){
-        Coordinates cords = new Coordinates(view, player_view_size);
+        Coordinates cords = new Coordinates(view, player_view_size, players.size());
         view.getCommand_Palette().setVisible(false);
         player_view_in_use = true;
         player_views = new HashMap<>();
         for(int i = 0; i < players.size(); i++){
             Player p = players.get(i);
-            Player_View pv = new Player_View(p.getName(), player_view_size ,cords.getPlayerViewCord(i), view.getCommand_Palette());
+            Player_View pv = new Player_View(p.getName(), player_view_size,  (int) cords.getPlayerViewCordX(i), (int) cords.getPlayerViewCordY(i), view.getCommand_Palette());
             player_views.put(p, pv);
             }
         updatePlayerViews();

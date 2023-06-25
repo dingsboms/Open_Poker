@@ -16,7 +16,7 @@ public class Main {
     }
 
     public static void defaultPlayers(){
-        for(int i = 1; i < 5; i++){
+        for(int i = 1; i < 9; i++){
             players.add(new Player("Player " + i));
         }
     }

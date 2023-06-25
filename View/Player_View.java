@@ -16,13 +16,13 @@ public class Player_View extends JFrame{
     String player_name;
     Controller controller;
 
-    public Player_View(String player_name, int size, Coordinate cord, Command_Palette command_field){
+    public Player_View(String player_name, int size, int x, int y,  Command_Palette command_field){
         super("Player View");
         this.player_name = player_name;
         cm = new Command_Palette();
         copyCommandButtons(cm, command_field);
-        x = (int) cord.getX();
-        y = (int) cord.getY();
+        this.x = x;
+        this.y = y;
         panel = new JPanel(new GridLayout(2,1));
         hand = new JLabel("", SwingConstants.CENTER);
         cm.setVisible(false);
