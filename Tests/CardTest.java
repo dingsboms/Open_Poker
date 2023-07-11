@@ -1,10 +1,10 @@
 package Tests;
-import Model.*;
-
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.example.spring_poker.api.Model.*;
 
 public class CardTest {
 

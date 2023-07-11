@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Deck;
-import Model.Card;
+import com.example.spring_poker.api.Model.Card;
+import com.example.spring_poker.api.Model.Deck;
 
 public class DeckTest {
     Deck d;

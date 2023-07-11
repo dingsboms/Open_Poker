@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Player;
+import com.example.spring_poker.api.Model.Player;
 
 public class PlayerTest {
     
