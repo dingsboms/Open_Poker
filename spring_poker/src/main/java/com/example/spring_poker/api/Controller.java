@@ -86,7 +86,7 @@ public class Controller {
         }
 
     public void getWinnerBeforeShow(){
-        for(Player p: players){if(!p.hasFolded()){active_player = p; 
+        for(Player p: players){if(!p.isFolded()){active_player = p; 
             if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette();}}};
         System.out.println("Winner is " + active_player.getName());
         active_player.addChips(table.getPot());
@@ -189,7 +189,7 @@ public class Controller {
 
     public ArrayList<Player> getActivePlayers(){
         ArrayList<Player> active_players = new ArrayList<>();
-        for(Player p: players){if(!p.hasFolded()){active_players.add(p);}}
+        for(Player p: players){if(!p.isFolded()){active_players.add(p);}}
         return active_players;
     }
 

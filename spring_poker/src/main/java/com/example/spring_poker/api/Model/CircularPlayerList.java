@@ -73,7 +73,7 @@ public class CircularPlayerList{
     public void nextPersonsTurn(){
         Node currentNode = getCurrentPlayerInTurn();
         resetCurrentTurnNode();
-        while(currentNode.nextNode.player.hasFolded()){
+        while(currentNode.nextNode.player.isFolded()){
             currentNode = currentNode.nextNode;
         }
         Player new_turn_player = currentNode.nextNode.player;
@@ -89,7 +89,7 @@ public class CircularPlayerList{
         }
         // Sets dealer to next person, if person has folded, goes to next
         currentNode = currentNode.nextNode;
-        while(currentNode.player.hasFolded()){
+        while(currentNode.player.isFolded()){
             currentNode = currentNode.nextNode;
         }
         currentNode.player.setIsTurn();
@@ -113,7 +113,7 @@ public class CircularPlayerList{
         Node currentNode = getCurrentPlayerInTurn();
         // Finds the player whos turn it is currently
         currentNode = currentNode.nextNode;
-        while(currentNode.player.hasFolded()){
+        while(currentNode.player.isFolded()){
             currentNode = currentNode.nextNode;
         }
         return currentNode;

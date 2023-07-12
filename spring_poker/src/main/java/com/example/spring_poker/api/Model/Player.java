@@ -11,18 +11,19 @@ public class Player {
     boolean bigBlind = false;
     boolean smallBlind = false;
     boolean dealer = false;
-    Scanner user_input;
     String status = "";
-    boolean fold = false;
+    boolean folded = false;
     boolean is_turn = false;
-    static int id = 0;
-    int uid;
+    static int pid = 0;
+    int id;
+    Scanner user_input;
+
 
     public Player(String name){
         this.name = name;
         user_input = new Scanner(System.in);
-        this.uid = id;
-        id++;
+        this.id = pid;
+        pid++;
     }
     public void setHand(String c1, String c2){
         String[] card1 = c1.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
@@ -36,14 +37,12 @@ public class Player {
     public ArrayList<Card> getHand(){return hand;}
     
     public void drawHand(Deck deck){
-        fold = false;
+        folded = false;
         bet = 0;
         if(!hand.isEmpty()){hand.clear();}
         hand.add(deck.drawCard());
         hand.add(deck.drawCard());
     }
-
-    public int getChips(){return chips;}
 
     public void setChips(int amount){chips = amount;}
 
@@ -54,11 +53,7 @@ public class Player {
             bet = bet_inp;
     }
 
-    public int getBet(){return bet;}
-
-    public Boolean hasFolded(){return fold;}
-
-    public void fold(){fold = true;}
+    public void fold(){folded = true;}
 
     public void call(int bet_to_call){
         bet = bet_to_call;
@@ -92,6 +87,12 @@ public class Player {
         status = "";
     }
 
+    public int getChips(){return chips;}
+
+    public int getBet(){return bet;}
+
+    public Boolean isFolded(){return folded;}
+
     public Boolean isSmallBlind(){return smallBlind;}
 
     public Boolean isBigBlind(){return bigBlind;}
@@ -104,7 +105,7 @@ public class Player {
 
     public void resetIsTurn(){is_turn = false;}
 
-    public int getUid(){return uid;}
+    public int getId(){return id;}
 
     public String getName(){return name;}
 

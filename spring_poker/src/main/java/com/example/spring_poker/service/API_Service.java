@@ -41,7 +41,7 @@ public class API_Service {
 
     public Player getPlayer(Integer id) {
         for(Player player: players){
-            if(id == player.getUid()){
+            if(id == player.getId()){
                 return player;
             }
         }
