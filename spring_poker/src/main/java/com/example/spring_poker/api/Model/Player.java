@@ -28,8 +28,8 @@ public class Player {
     public void setHand(String c1, String c2){
         String[] card1 = c1.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
         String[] card2 = c2.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
-        Card k = new Card(Integer.parseInt(card1[0]), card1[1].charAt(0));
-        Card l = new Card(Integer.parseInt(card2[0]), card2[1].charAt(0));
+        Card k = new Card(Integer.parseInt(card1[0]), card1[1]);
+        Card l = new Card(Integer.parseInt(card2[0]), card2[1]);
         hand.clear();
         hand.add(k);
         hand.add(l);

@@ -93,7 +93,7 @@ public class Table {
         String[] stringCards = {card1, card2, card3, card4, card5};
         for(String string_card:stringCards){
             String str[] = string_card.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
-            card = new Card(Integer.parseInt(str[0]), str[1].charAt(0));
+            card = new Card(Integer.parseInt(str[0]), str[1]);
             table_cards.add(card);
         }
     }

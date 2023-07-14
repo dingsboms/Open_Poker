@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class Deck{
     // H - Hearts, D - Diamonds, C - Clubs, S - Spades
-    char[] types = {'H', 'D', 'C', 'S'};
+    String[] types = {"❤️", "♦️", "♣️", "♠️"};
     ArrayList<Card> cards = new ArrayList<Card>();
 
     public Deck(){newDeck();}
@@ -13,7 +13,7 @@ public class Deck{
     public void newDeck(){
         if(cards!=null){cards.clear();}
         for(int i = 0; i < 4; i++){
-            char type = types[i];
+            String type = types[i];
             for(int y = 2; y <= 14; y++){
                 Card card = new Card(y, type);
                 cards.add(card);

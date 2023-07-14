@@ -96,26 +96,26 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
                 no_duplicates.add(card);}}
         return no_duplicates;}
 
-    public char getDominantType(ArrayList<Card> straight){
-        char dominant_type = 'N';
+    public String getDominantType(ArrayList<Card> straight){
+        String dominant_type = "N";
         class Char_int{
-            private char c;
+            private String c;
             private int i;
 
-            public Char_int(char c){
+            public Char_int(String c){
                 this.c = c;
                 this.i = 0;
             }
             void int_up(){i++;}
             int getI(){return i;}
-            char getChar(){return c;}
+            String getChar(){return c;}
         }
-        Char_int[] num_of_chars ={new Char_int('H'), new Char_int('D'), new Char_int('C'), new Char_int('S')};
+        Char_int[] num_of_chars ={new Char_int("❤️"), new Char_int("♦️"), new Char_int("♣️"), new Char_int("♠️")};
         for(Card card:straight){
-            if(card.getType() == 'H'){num_of_chars[0].int_up();}
-            else if(card.getType() == 'D'){num_of_chars[1].int_up();}
-            else if(card.getType() == 'C'){num_of_chars[2].int_up();}
-            else if(card.getType() == 'S'){num_of_chars[3].int_up();}
+            if(card.getType() == "❤️"){num_of_chars[0].int_up();}
+            else if(card.getType() == "♦️"){num_of_chars[1].int_up();}
+            else if(card.getType() == "♣️"){num_of_chars[2].int_up();}
+            else if(card.getType() == "♠️"){num_of_chars[3].int_up();}
         }
         int highest_value = 0;
         for(Char_int char_type:num_of_chars){
@@ -154,7 +154,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         return fourKindCard;
     }
 
-    public ArrayList<Card> getCardsOfSameType(char type){
+    public ArrayList<Card> getCardsOfSameType(String type){
         ArrayList<Card> cards_of_same_type = new ArrayList<>();
         for(Card card:available_cards){
             if(card.getType() == type){cards_of_same_type.add(card);}}
@@ -234,7 +234,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
     public boolean is_straight_flush(ArrayList<Card> straight){
         if(straight.isEmpty()){return false;}
         int num_of_type = 0;
-        char type = straight.get(0).getType();
+        String type = straight.get(0).getType();
         for(Card card:straight){if(type == card.getType()){num_of_type++;}}
         if(num_of_type == 5){is_straight_flush = true;}
 
@@ -248,16 +248,16 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
         ArrayList<Card> flush = new ArrayList<>();
 
         for(Card card:available_cards){
-            char type = card.getType();
-            if(type == 'H'){num_of_hearts++;}
-            else if(type == 'D'){num_of_diamonds++;}
-            else if(type == 'C'){num_of_clubs++;}
-            else if(type == 'S'){num_of_spades++;}
+            String type = card.getType();
+            if(type == "❤️"){num_of_hearts++;}
+            else if(type == "♦️"){num_of_diamonds++;}
+            else if(type == "♣️"){num_of_clubs++;}
+            else if(type == "♠️"){num_of_spades++;}
         }
-        if(num_of_hearts >= 5){flush = getCardsOfSameType('H'); is_flush = true;}
-        else if(num_of_diamonds >= 5){flush = getCardsOfSameType('D'); is_flush = true;}
-        else if(num_of_clubs >= 5){flush = getCardsOfSameType('C'); is_flush = true;}
-        else if(num_of_spades >= 5){flush = getCardsOfSameType('S'); is_flush = true;}
+        if(num_of_hearts >= 5){flush = getCardsOfSameType("❤️"); is_flush = true;}
+        else if(num_of_diamonds >= 5){flush = getCardsOfSameType("♦️"); is_flush = true;}
+        else if(num_of_clubs >= 5){flush = getCardsOfSameType("♣️"); is_flush = true;}
+        else if(num_of_spades >= 5){flush = getCardsOfSameType("♠️"); is_flush = true;}
         Collections.reverse(flush);
         int i = 1;
         while(flush.size() > 5){
@@ -332,7 +332,7 @@ public class Poker_Hand implements Comparable<Poker_Hand>{
 
     public ArrayList<Card> getRelevantStraight(ArrayList<Integer> straight_num){
         ArrayList<Card> relevant_straight = new ArrayList<>();
-        char dominant_type = getDominantType(available_cards);
+        String dominant_type = getDominantType(available_cards);
         ArrayList<Card> duplicates = check_of_a_kind();
         for(int n:straight_num){
             for(Card c:available_cards){
