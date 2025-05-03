@@ -14,7 +14,16 @@ import com.example.spring_poker.api.View.Table_View;
 public class API_Service {
 
     static ArrayList<Player> players = new ArrayList<>();
+    static Controller controller;
 
+    public API_Service(){
+        defaultPlayers();
+        Table_View view = new Table_View(players, 150);
+        Table table = new Table(players, 50);
+        controller = new Controller(view, table);
+        controller.usePlayerViews();
+
+    }
 
     public static void useSetup(){
         Setup_View sv = new Setup_View();
@@ -30,22 +39,15 @@ public class API_Service {
         }
     }
 
-    public API_Service(){
-        defaultPlayers();
-        Table_View view = new Table_View(players, 150);
-        Table table = new Table(players, 50);
-        Controller c = new Controller(view, table);
-        c.usePlayerViews();
 
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    public Player getPlayer(Integer id) {
-        for(Player player: players){
-            if(id == player.getId()){
-                return player;
-            }
+    public void playerCheck(int id){
+        if(controller.getActivePlayer().getId() == id){
+            controller.playerResponse();
         }
-        return null;
     }
     
 }

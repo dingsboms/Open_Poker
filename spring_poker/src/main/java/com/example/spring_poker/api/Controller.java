@@ -58,6 +58,7 @@ public class Controller {
 
     public void updateView(){
         getActivePlayer();
+        System.out.println("Active Player: " + active_player.getName() + " Cards: " + active_player.getHand());
         if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette(); text_field = cp.getTextField();}
         updateCommandPallette();
         view.setPot(table.getPot());
@@ -183,7 +184,6 @@ public class Controller {
 
     public Player getActivePlayer(){
         active_player = table.getActivePlayer();
-        System.out.println("Active Player: " + active_player.getName() + " Cards: " + active_player.getHand());
         return active_player;
     }
 
@@ -253,33 +253,54 @@ public class Controller {
         for(Map.Entry<Player, Player_View> set : player_views.entrySet()){set.getValue().updateHand(set.getKey().getHand().toString());}
     }
 
+    public void playerResponse(){
+        if(player_view_in_use){cp.setVisible(false);}
+        nextPersonsTurn();
+        view.resetTextLabel();
+        view.refresh();
+        if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette();}
+    }
+
+    public void raiseResponse(){
+        String input = text_field.getText();
+        try{int raise = Integer.parseInt(input); 
+            if(raise <= 0 || raise > active_player.getChips()){throw new NumberFormatException();}
+            setActivePlayerBet(highest_bet + raise);
+            addTablePot(highest_bet + raise);
+            highest_bet += raise;
+            highest_bidder = active_player;
+            playerResponse();
+            } catch(NumberFormatException ex){System.out.println("Invalid input");}
+    }
+
+    public void raiseResponse(int raise){
+        setActivePlayerBet(highest_bet + raise);
+        addTablePot(highest_bet + raise);
+        highest_bet += raise;
+        highest_bidder = active_player;
+        playerResponse();
+    }
+
+    public void checkResponse(){
+        playerResponse();
+    }
+
     class Poker_Button implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(player_view_in_use){cp.setVisible(false);}
-            nextPersonsTurn();
-            view.resetTextLabel();
-            view.refresh();
-            if(player_view_in_use){cp = player_views.get(active_player).getCommand_Palette();}
+            playerResponse();
         }
-
     }
+
     class Raise extends Poker_Button{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String input = text_field.getText();
-            try{int raise = Integer.parseInt(input); if(raise <= 0 || raise > active_player.getChips()){throw new NumberFormatException();}
-                setActivePlayerBet(highest_bet + raise);
-                addTablePot(highest_bet + raise);
-                highest_bet += raise;
-                highest_bidder = active_player;
-                super.actionPerformed(e);
-                }
-            catch(NumberFormatException ex){System.out.println("Invalid input");}
+            raiseResponse();
         }
     }
+
     class Bet extends Poker_Button{
     
         @Override

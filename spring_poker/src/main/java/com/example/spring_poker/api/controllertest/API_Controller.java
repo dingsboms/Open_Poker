@@ -1,7 +1,13 @@
 package com.example.spring_poker.api.controllertest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spring_poker.api.Model.Player;
@@ -17,7 +23,17 @@ public class API_Controller {
     }
 
     @GetMapping("/player")
-    public Player getPlayer(@RequestParam Integer id){
-        return api_service.getPlayer(id);
+    public ArrayList<Player> getPlayers(){
+        return api_service.getPlayers();
+    }
+
+    @PostMapping(value = "/check")
+    public void checkResponse(@RequestBody String player_id) throws UnsupportedEncodingException{
+        String id;
+        id = URLDecoder.decode(player_id, StandardCharsets.UTF_8.toString());
+        id = id.replace("\"", "");
+        id = id.replace("=", "");
+        int i = Integer.parseInt(id);
+        api_service.playerCheck(i);
     }
 }
